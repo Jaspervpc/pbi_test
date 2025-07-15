@@ -1,0 +1,12 @@
+role 'SYN Full Access'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' =
+			(
+			          [FTS_COMPANY] = "SYN"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "SYN"
+			        )
+
+	tablePermission '200_DWH FWL_WORKLOGS' = [FWL_COMPANY] = "SYN"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "SYN"
+
+	annotation PBI_Id = 0a547b00fc9646359f0c2a730c0f9999
+

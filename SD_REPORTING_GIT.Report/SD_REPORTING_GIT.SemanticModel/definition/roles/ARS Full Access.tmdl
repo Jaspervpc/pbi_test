@@ -1,0 +1,9 @@
+role 'ARS Full Access'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' = [FTS_COMPANY] = "ARS"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "ARS"
+
+	tablePermission '200_DWH FWL_WORKLOGS' = [FWL_COMPANY] = "ARS"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "ARS"
+
+	annotation PBI_Id = 77e15c3279c34a1c9ca8fb16e7ea0430
+

@@ -1,0 +1,34 @@
+table Placeholder
+	lineageTag: d7b1b19e-1492-4796-b921-8e1ae0d713aa
+
+	column Column
+		formatString: 0
+		lineageTag: d05e5278-a1ec-4c46-9c8b-842922b39c7d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Placeholder 1' = 0
+		formatString: 0
+		lineageTag: 88b01f87-0e99-49de-a809-506e3a8fa4fa
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Placeholder 2' = 0
+		formatString: 0
+		lineageTag: 0e00e3bf-d048-4b34-aada-b3767b40d64e
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Placeholder = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = ddbf26b7860c40e0a8fe5421d54f21af
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

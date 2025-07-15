@@ -1,0 +1,39 @@
+table HLS_last_timesheet_update
+	lineageTag: 5e7ff824-3a38-49ac-92b1-2db799ab8e5b
+
+	measure 'Last Semantic Refresh' = ```
+			
+			    FORMAT(NOW(), "dd.MM.yyyy HH:mm")
+			
+			```
+		lineageTag: 78812ab5-ee22-4c3a-8d32-f94a05566792
+
+	column last_activity
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8a12697f-b443-469c-adcc-9576b3f8427c
+		summarizeBy: none
+		sourceColumn: last_activity
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_billing_activity
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: eaefc98e-05af-4af9-9c78-052010c27226
+		summarizeBy: none
+		sourceColumn: last_billing_activity
+
+		annotation SummarizationSetBy = Automatic
+
+	partition HLS_last_timesheet_update = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"Sync_Log" = Source{[Schema="public", Item="last_timesheet"]}[Data]
+				in
+				    Sync_Log
+
+	annotation PBI_ResultType = Table
+

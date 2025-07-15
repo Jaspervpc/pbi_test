@@ -1,0 +1,57 @@
+table '200_HSL Sync_Log'
+	lineageTag: 5bb9014c-c543-483e-9d14-a805c591d785
+
+	column HSL_FUNCTIONS
+		dataType: string
+		lineageTag: 2718bda0-78ff-4dd0-84fc-68112c7b9406
+		summarizeBy: none
+		sourceColumn: HSL_FUNCTIONS
+
+		annotation SummarizationSetBy = Automatic
+
+	column HSL_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 2035c2f9-8cc9-4d33-876c-cd9e125ca674
+		summarizeBy: count
+		sourceColumn: HSL_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column HSL_FUNCTIONS_ARGS
+		dataType: string
+		lineageTag: e20317e5-735a-4c61-af6f-2aa0b278f2ab
+		summarizeBy: none
+		sourceColumn: HSL_FUNCTIONS_ARGS
+
+		annotation SummarizationSetBy = Automatic
+
+	column HSL_STARTED_AT
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6fee385c-988f-41aa-9471-b8957b5a20e0
+		summarizeBy: none
+		sourceColumn: HSL_STARTED_AT
+
+		annotation SummarizationSetBy = Automatic
+
+	column HSL_FINISHED_AT
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4f7e731c-c759-44a4-9814-0f11fdd2e16d
+		summarizeBy: none
+		sourceColumn: HSL_FINISHED_AT
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '200_HSL Sync_Log' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"Sync_Log" = Source{[Schema="200_DWH", Item="HSL_SYNC_LOG"]}[Data]
+				in
+				    Sync_Log
+
+	annotation PBI_ResultType = Table
+

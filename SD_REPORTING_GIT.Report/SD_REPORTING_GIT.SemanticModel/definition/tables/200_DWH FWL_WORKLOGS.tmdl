@@ -1,0 +1,220 @@
+table '200_DWH FWL_WORKLOGS'
+	lineageTag: d297fe2c-3ad3-46c5-9f18-b5ee2f04fd6e
+
+	measure 'WL.HRS.BILL' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FWL_WORKLOGS'[FWL_BILLABLE_HOURS]))
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 1aa7f59f-85f7-4e32-9927-e209f267eccf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Diff_Temp_SAP_CATS = [WL.HRS.BILL] - [HRS.BILL]
+		lineageTag: 9e67c477-7869-4bbb-9630-f2861757701c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure FWL_NON_BIL = SUM('200_DWH FWL_WORKLOGS'[FWL_SPENT_HOURS ]) - SUM('200_DWH FWL_WORKLOGS'[FWL_BILLABLE_HOURS])
+		lineageTag: db40d954-eb05-4d9a-be87-ae13ca6c308f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FWL_ISSUE_ID
+		dataType: string
+		lineageTag: 87943ffd-134d-4e5e-94ab-b0526d714999
+		summarizeBy: none
+		sourceColumn: FWL_ISSUE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_BILLABLE_HOURS
+		dataType: double
+		lineageTag: 96e4dfaf-44f9-4c20-8d4a-ae2b14e90d28
+		summarizeBy: sum
+		sourceColumn: FWL_BILLABLE_HOURS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FWL_START_TIME
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7a92a34b-6502-4e86-94fb-bb2e122079de
+		summarizeBy: none
+		sourceColumn: FWL_START_TIME
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_USER_ID
+		dataType: string
+		lineageTag: 41744904-eaf4-4d31-b8d9-0d9b541ee78f
+		summarizeBy: none
+		sourceColumn: FWL_USER_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_SURROGATE
+		dataType: string
+		lineageTag: a975ce61-7ab5-4502-b0bc-3bc10f85e6e2
+		summarizeBy: none
+		sourceColumn: FWL_SURROGATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_ATTRIBUTES
+		dataType: string
+		lineageTag: 0e8fe19d-9223-4089-afc9-a9d56b06c3a1
+		summarizeBy: none
+		sourceColumn: FWL_ATTRIBUTES
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_TEMPO_WORKLOG_ID
+		dataType: string
+		lineageTag: 6a023443-06e2-47dc-80bc-ed011a0e8528
+		summarizeBy: none
+		sourceColumn: FWL_TEMPO_WORKLOG_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_CREATED_AT
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3e23860a-5c4b-4566-ab79-972b12ef05ba
+		summarizeBy: none
+		sourceColumn: FWL_CREATED_AT
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_PERSONIO_ID
+		dataType: string
+		lineageTag: b7a9e970-1f51-496f-8ae0-4d16897d30fa
+		summarizeBy: none
+		sourceColumn: FWL_PERSONIO_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_TEMPO_UPDATED_AT
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b8e188ac-0e4f-49c4-b9b5-5f0fda356d24
+		summarizeBy: none
+		sourceColumn: FWL_TEMPO_UPDATED_AT
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_WORK_CATEGORY
+		dataType: string
+		lineageTag: 47dbdc57-7ceb-4a9f-beb2-c4231d5a9194
+		summarizeBy: none
+		sourceColumn: FWL_WORK_CATEGORY
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_WORK_PACKAGE_ID
+		dataType: string
+		lineageTag: cd1d0596-dca7-4a21-bde6-fcd692c92de5
+		summarizeBy: none
+		sourceColumn: FWL_WORK_PACKAGE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_TEMPO_ACCOUNT
+		dataType: string
+		lineageTag: 9f024891-b48d-47df-bbe9-3faab989df66
+		summarizeBy: none
+		sourceColumn: FWL_TEMPO_ACCOUNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_REVIEW_REQUIRED
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6416e10c-ecff-4f9d-977a-5dfa24d3b5dc
+		summarizeBy: none
+		sourceColumn: FWL_REVIEW_REQUIRED
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_UPDATED_AT
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 592ac96d-4988-4d0b-b569-3616d4efb76f
+		summarizeBy: none
+		sourceColumn: FWL_UPDATED_AT
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_TEMPO_CREATED_AT
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: cf3fae51-d894-40c1-a14f-5339f215b4c9
+		summarizeBy: none
+		sourceColumn: FWL_TEMPO_CREATED_AT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FWL_SPENT_HOURS '
+		dataType: double
+		lineageTag: a8d246c6-2119-4d10-ab74-934bcc4b2b81
+		summarizeBy: sum
+		sourceColumn: "FWL_SPENT_HOURS "
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FWL_START_DATE
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 14180fce-8fe5-4698-b4d8-1a0d9f9ad226
+		summarizeBy: none
+		sourceColumn: FWL_START_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column FWL_JIRA_WORKLOG_ID
+		dataType: string
+		lineageTag: 1d550862-3ecc-453c-ac5e-7e0c3af6693e
+		summarizeBy: none
+		sourceColumn: FWL_JIRA_WORKLOG_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FWL_COMPANY = RELATED('200_DWH DWP_WORK_PACKAGE'[DWP_COMPANY_ID])
+		lineageTag: ac60421c-bf8c-4d35-bfa4-309398f2e756
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FWL_DESCRIPTION '
+		dataType: string
+		lineageTag: 8dbded1c-d6ab-4bbf-a8b0-c187903ab003
+		summarizeBy: none
+		sourceColumn: "FWL_DESCRIPTION "
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '200_DWH FWL_WORKLOGS' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				      #"200_DWH_FTS_TIMESHEETS" = Source{[Schema="200_DWH",Item="FWL_WORKLOGS"]}[Data]
+				in
+				    #"200_DWH_FTS_TIMESHEETS"
+
+	annotation PBI_ResultType = Table
+

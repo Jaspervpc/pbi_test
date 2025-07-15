@@ -1,0 +1,139 @@
+table DATE
+	lineageTag: c018ab8f-f3b6-46d6-813b-a0ac8a58cfd0
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a6f0f7d5-0687-486d-9b06-198c4e0bc1c2
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		lineageTag: 8ef4756e-6c81-4cb3-ade6-3da9566b2884
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Quarter
+		dataType: double
+		lineageTag: 736821e0-f4ad-4899-9816-262b701d4ee0
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Month Number'
+		dataType: double
+		lineageTag: 03f2c389-64a4-4da9-872e-7db98e247022
+		summarizeBy: sum
+		sourceColumn: Month Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: ab7b0321-2947-4931-9f15-a35f0f7ff921
+		summarizeBy: none
+		sourceColumn: Month Name
+		sortByColumn: 'Month Number'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day of Week Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 04d6dd8d-f371-456c-a508-76736bd6a085
+		summarizeBy: sum
+		sourceColumn: Day of Week Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day of Week Name'
+		dataType: string
+		lineageTag: d3e49673-447e-4691-8960-13c6410deaed
+		summarizeBy: none
+		sourceColumn: Day of Week Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week of Year'
+		dataType: string
+		lineageTag: 7856dbb1-cb5e-4f85-aa9e-d365b18a7aa8
+		summarizeBy: none
+		sourceColumn: Week of Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWorkingDay
+		dataType: int64
+		formatString: 0
+		lineageTag: f917be0b-1b1e-4d0a-b050-90117e03ca8b
+		summarizeBy: sum
+		sourceColumn: IsWorkingDay
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Slicer Date'
+		dataType: string
+		lineageTag: d6698c39-5c0f-4943-ac3b-21ca40130803
+		summarizeBy: none
+		sourceColumn: Slicer Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuarterSort = 'DATE'[Quarter]   // falls das 1, 2, 3, 4 ist
+		lineageTag: 8b44d52e-3b99-4c9a-aba9-f4e432eae557
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column QuarterLabel = "Q" & FORMAT('DATE'[Quarter], "0")
+		lineageTag: 0c218e2e-5932-4ed0-b67d-29e134f399a4
+		summarizeBy: none
+		sortByColumn: QuarterSort
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DATE = m
+		mode: import
+		source =
+				let
+				    StartDate = #date(1995, 1, 1),
+				    EndDate = #date(2030, 12, 31),
+				    DateList = List.Dates(StartDate, Duration.Days(EndDate - StartDate) + 1, #duration(1, 0, 0, 0)),
+				    ConvertToDateTable = Table.FromList(DateList, Splitter.SplitByNothing(), {"Date"}),
+				    ChangeType = Table.TransformColumnTypes(ConvertToDateTable,{{"Date", type date}}),
+				    AddYear = Table.AddColumn(ChangeType, "Year", each Date.Year([Date]), type number),
+				    AddQuarter = Table.AddColumn(AddYear, "Quarter", each Date.QuarterOfYear([Date]), type number),
+				    AddMonthNumber = Table.AddColumn(AddQuarter, "Month Number", each Date.Month([Date]), type number),
+				    AddMonthName = Table.AddColumn(AddMonthNumber, "Month Name", each Date.MonthName([Date]), type text),
+				    AddDayOfWeekNumber = Table.AddColumn(AddMonthName, "Day of Week Number", each Date.DayOfWeek([Date])+1, Int64.Type), // +1 to make Monday=1, Sunday=7
+				    AddDayOfWeekName = Table.AddColumn(AddDayOfWeekNumber, "Day of Week Name", each Date.DayOfWeekName([Date]), type text),
+				    AddWeekOfYear = Table.AddColumn(AddDayOfWeekName, "Week of Year", each Date.WeekOfYear([Date]), type number),
+				    AddIsWorkingDay = Table.AddColumn(AddWeekOfYear, "IsWorkingDay", each if [Day of Week Number] = 1 or [Day of Week Number] = 7 then 0 else 1, Int64.Type),
+				   #"Changed Type" = Table.TransformColumnTypes(AddIsWorkingDay,{{"Year", Int64.Type}, {"Week of Year", type text}}),
+				    #"AddSlicerDate" = Table.AddColumn(#"Changed Type", "Slicer Date", each if [Date] = DateTime.Date(DateTime.LocalNow()) then "Today" else if [Date] < DateTime.Date(DateTime.LocalNow()) then Date.ToText([Date], [Format="dd.MM.yyyy"]) else ""),
+				    #"Filtered Rows" = Table.SelectRows(AddSlicerDate, each List.Contains({2024, 2025, 2026}, [Year]))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_ResultType = Table
+

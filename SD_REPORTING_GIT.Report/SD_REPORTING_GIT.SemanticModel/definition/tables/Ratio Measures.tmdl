@@ -1,0 +1,82 @@
+table 'Ratio Measures'
+	lineageTag: caf592cd-9bf7-479a-8943-5d0d4dbc6d68
+
+	measure 'RATIO.BILLABLE/AVAILABLE.%' =
+			
+			DIVIDE([HRS.BILL], [HRS.WORKING.AVAILABLE])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 891ac45e-74ec-42a0-9bd9-77d3d6d2e7c1
+
+	measure 'RATIO.BILLABLE/BOOKED.%' = DIVIDE([HRS.BILL], [HRS.BOOKED])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 82ae0d4c-c2fc-4a8e-814e-23619d87851f
+
+	measure 'RATIO.BILLABLE/BUDGET.%' = ```
+			DIVIDE([HRS.BILL], [DYNAMIC_BUDGET_INITIAL])
+			
+			```
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: a5cf7a19-d450-4167-874d-bbad9be26d94
+
+	measure 'RATIO.BILLABLE/PAID.%' =
+			
+			DIVIDE([HRS.BILL], [HRS.WORKING.PAID])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 131f6ee5-cf78-4c49-97a6-1dbd027b7bd9
+
+	measure 'RATIO.EXP.BILLABLE/AVAILABLE.%' =
+			
+			DIVIDE([HRS.EXP.BILL], [HRS.WORKING.AVAILABLE])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: d2daa9e4-4517-48e4-b541-a14ebfc0c0bd
+
+	measure 'RATIO.EXP.BILLABLE/CONTRACTED.%' = DIVIDE([HRS.EXP.BILL], [FTE.CONTRACTED.HRS])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 08149a5c-54f5-4d76-b06e-cc822f2a5f1e
+
+	measure 'RATIO.EXP.BILLABLE/PAID.%' = DIVIDE([HRS.EXP.BILL], [HRS.WORKING.PAID])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 769a5fbe-371c-4910-9dcb-da0f1a95cb53
+
+	measure 'RATIO.SICK/CONTRACTED.%' = DIVIDE([HRS.PERCAT.SICK], [FTE.CONTRACTED.HRS])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: f48df072-cec8-4d22-b8c7-129618e5cc35
+
+	measure 'RATIO.BOOKED/CONTRACTED.%' = DIVIDE([HRS.BOOKED], [FTE.CONTRACTED.HRS])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 565be85b-9122-4bac-a66d-421eb7c6fed0
+
+	measure 'RATIO.EXP.BILLABLE/CONTRACTED_CB.%' = DIVIDE([HRS.EXP.BILL], [FTE.CALCULATIONBASED.HRS])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 03e7032f-41c6-432c-b199-9abf94d6b2aa
+
+	measure 'RATIO.BILLABLE/PAID.CB%' =
+			
+			DIVIDE([HRS.BILL], [HRS.WORKING.PAID.CB])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 30f92935-b17a-4460-94d6-4e6a59febbf8
+
+	measure 'RATIO.EXP.BILLABLE/PAID.CB%' = DIVIDE([HRS.EXP.BILL], [HRS.WORKING.PAID.CB])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 8b2e1625-1dd5-42a9-9088-f51cd2113386
+
+	measure 'RATIO.EXP.BILLABLE/AVAILABLE.CB%' = DIVIDE([HRS.EXP.BILL], [HRS.WORKING.AVAILABLE.CB])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 69e7fae3-aad2-4e64-9bd9-9fd7c898a6bc
+
+	measure 'RATIO.BILLABLE/AVAILABLE.CB%' = DIVIDE([HRS.BILL], [HRS.WORKING.AVAILABLE.CB])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 493d0979-3ae5-4c32-8ebf-c4598615caf8
+
+	partition 'Ratio Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

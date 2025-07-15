@@ -1,0 +1,76 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["200_DWH DCU_CUSTOMERS","200_DWH DCO_COMPANIES","200_DWH DPE_EMPLOYEES","200_DWH FTS_TIMESHEETS","200_DWH DWP_WORK_PACKAGE","200_DWH BPE_EMPLOYEES","200_DWH DPO_PROJECTS","DATE","Master Data Measures","Date Measures","Timesheet Category Measures (HRS)","Timesheet Measures","200_HSL Sync_Log","SAP Category Measures","Personio Category Measures","Ratio Measures","KPIs_AGGREGATED","DUMMY_TABLE1","200_DWH FWL_WORKLOGS","HLS_last_timesheet_update","HLP_last_employee_update","Last Power_BI Update"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBIDesktopVersion = 2.144.1378.0 (25.06)+cba1e61f16ea36d44901f06fa446299040122394
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","DevMode"]
+
+annotation __TEdtr = 1
+
+ref table '200_DWH DCU_CUSTOMERS'
+ref table '200_DWH DCO_COMPANIES'
+ref table '200_DWH DPE_EMPLOYEES'
+ref table '200_DWH FTS_TIMESHEETS'
+ref table '200_DWH DWP_WORK_PACKAGE'
+ref table '200_DWH DPO_PROJECTS'
+ref table DATE
+ref table 'Master Data Measures'
+ref table 'Date Measures'
+ref table 'Timesheet Measures'
+ref table '200_HSL Sync_Log'
+ref table Placeholder
+ref table 'SAP Category Measures'
+ref table 'Personio Category Measures'
+ref table 'Ratio Measures'
+ref table '200_DWH BPE_EMPLOYEES'
+ref table KPIs_AGGREGATED
+ref table Timesheets2
+ref table DATE2
+ref table EMPLOYEE2
+ref table Work_Packages2
+ref table DUMMY_TABLE1
+ref table ZeigeModus
+ref table '200_DWH FWL_WORKLOGS'
+ref table 'Organization Level'
+ref table 'Date Dimension'
+ref table HLS_last_timesheet_update
+ref table HLP_last_employee_update
+ref table 'Last Power_BI Update'
+
+ref role CEO
+ref role Admin
+ref role 'SYN Employee Standard'
+ref role 'ARS Employee Standard'
+ref role 'XIN Employee Standard'
+ref role 'ARS Full Access'
+ref role 'SYN Full Access'
+ref role 'GROUP Project Manager'
+ref role 'XIN Full Access'
+ref role 'ORCA - DATA'
+ref role 'TDE Employee Standard'
+ref role 'TDE Full Access'
+ref role 'GROUP Department'
+ref role 'Jeanette Fuerst - ITAM'
+ref role TESTSTANDARD
+ref role 'NCD Employee Standard'
+ref role 'NCD Full Access'
+ref role 'TAT Employee Standard'
+ref role 'TAT Full Access'
+ref role 'BBI Employee Standard'
+ref role 'BBI Full Access'
+ref role 'Employee Standard TEST'
+ref role 'GROUP TEST Project Manager (2)'
+ref role 'TGG Full Access (2)'
+ref role 'TGG TDE Full Access'
+
+ref cultureInfo en-US
+

@@ -1,0 +1,27 @@
+role 'XIN Employee Standard'
+	modelPermission: read
+
+	tablePermission '200_DWH DPE_EMPLOYEES' = ```
+			VAR CurrentUserID = CALCULATE(
+			    MAX('200_DWH DPE_EMPLOYEES'[DPE_EMPLOYEE_ID]),
+			    '200_DWH DPE_EMPLOYEES'[DPE_MAIL] = USERPRINCIPALNAME()
+			)
+			 
+			 
+			RETURN
+			 
+			    // Bedingung 1: Zugriff auf DPE-Daten
+			    PATHCONTAINS(
+			        ('200_DWH DPE_EMPLOYEES'[Path]),
+			        MAXX(
+			            FILTER(
+			                '200_DWH DPE_EMPLOYEES',
+			                [DPE_MAIL] = USERPRINCIPALNAME()
+			            ),
+			            '200_DWH DPE_EMPLOYEES'[DPE_EMPLOYEE_ID]
+			        )
+			    )
+			```
+
+	annotation PBI_Id = c939f8fc217140ac8ffaff754dd196ef
+

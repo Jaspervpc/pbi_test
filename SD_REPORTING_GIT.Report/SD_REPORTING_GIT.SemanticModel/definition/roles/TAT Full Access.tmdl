@@ -1,0 +1,9 @@
+role 'TAT Full Access'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' = [FTS_COMPANY] = "TAT"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "TAT"
+
+	tablePermission '200_DWH FWL_WORKLOGS' = [FWL_COMPANY] = "TAT"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "TAT"
+
+	annotation PBI_Id = c462b725f9ca45e08bc88cc67351a796
+

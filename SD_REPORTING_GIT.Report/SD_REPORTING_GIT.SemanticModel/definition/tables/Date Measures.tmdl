@@ -1,0 +1,223 @@
+table 'Date Measures'
+	lineageTag: 47dc5468-c5dc-492a-b2a0-3b98d061a4de
+
+	measure IsCurrentinDate = ```
+			
+			VAR SelectedStartDate = CALCULATE(MIN('DATE'[Date]), ALLSELECTED('DATE'))
+			VAR SelectedEndDate = CALCULATE(MAX('DATE'[Date]), ALLSELECTED('DATE'))
+			
+			VAR TotalSelectedDays = DATEDIFF(SelectedStartDate, SelectedEndDate, DAY) + 1
+			
+			VAR EmployeeEntries =
+			    ADDCOLUMNS(
+			        FILTER(
+			            '200_DWH DPE_EMPLOYEES',
+			            '200_DWH DPE_EMPLOYEES'[DPE_VALID_FROM] <= SelectedEndDate &&
+			            (ISBLANK('200_DWH DPE_EMPLOYEES'[DPE_VALID_TO]) || '200_DWH DPE_EMPLOYEES'[DPE_VALID_TO] >= SelectedStartDate)
+			        ),
+			        "ActiveDays",
+			        VAR EntryStart = MAX(SelectedStartDate, '200_DWH DPE_EMPLOYEES'[DPE_VALID_FROM])
+			        VAR EntryEnd = MIN(SelectedEndDate, COALESCE('200_DWH DPE_EMPLOYEES'[DPE_VALID_TO], SelectedEndDate))
+			        RETURN DATEDIFF(EntryStart, EntryEnd, DAY) + 1
+			    )
+			
+			VAR TotalActiveDays = 
+			    SUMX(
+			        EmployeeEntries,
+			        [ActiveDays]
+			    )
+			
+			VAR IsActiveEmployee = IF(TotalActiveDays > 0, "TRUE", "FALSE")
+			
+			RETURN
+			IsActiveEmployee
+			
+			```
+		lineageTag: b57c4b9a-1b83-4030-9479-f191d4ed9b00
+
+	measure IsEmployeedDateInRange = ```
+			
+			VAR SelectedStartDate = CALCULATE(MIN('DATE'[Date]), ALLSELECTED('DATE'))
+			VAR SelectedEndDate = CALCULATE(MAX('DATE'[Date]), ALLSELECTED('DATE'))
+			
+			VAR EmployeeEntries = 
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES',
+			        '200_DWH DPE_EMPLOYEES'[DPE_ENTRY_DATE] <= SelectedEndDate &&
+			        (ISBLANK('200_DWH DPE_EMPLOYEES'[DPE_EXIT_DATE]) || '200_DWH DPE_EMPLOYEES'[DPE_EXIT_DATE] >= SelectedStartDate)
+			    )
+			
+			RETURN
+			IF(
+			    COUNTROWS(EmployeeEntries) > 0,
+			    "TRUE",
+			    "FALSE"
+			)
+			 
+			
+			
+			
+			
+			```
+		lineageTag: 4e5e1792-96dd-4f9e-ad1d-518b5afc1afd
+
+	measure ActiveDaysShare = ```
+			
+			VAR SelectedStartDate = CALCULATE(MIN('DATE'[Date]), ALLSELECTED('DATE'))
+			VAR SelectedEndDate = CALCULATE(MAX('DATE'[Date]), ALLSELECTED('DATE'))
+			
+			VAR TotalSelectedDays = DATEDIFF(SelectedStartDate, SelectedEndDate, DAY) + 1
+			
+			VAR EmployeeEntries =
+			    ADDCOLUMNS(
+			        FILTER(
+			            '200_DWH DPE_EMPLOYEES',
+			            '200_DWH DPE_EMPLOYEES'[DPE_VALID_FROM] <= SelectedEndDate &&
+			            (ISBLANK('200_DWH DPE_EMPLOYEES'[DPE_VALID_TO]) || '200_DWH DPE_EMPLOYEES'[DPE_VALID_TO] >= SelectedStartDate)
+			        ),
+			        "EntryStart", MAX(SelectedStartDate, '200_DWH DPE_EMPLOYEES'[DPE_VALID_FROM]),
+			        "EntryEnd", MIN(SelectedEndDate, COALESCE('200_DWH DPE_EMPLOYEES'[DPE_VALID_TO], SelectedEndDate))
+			    )
+			
+			VAR ActiveDaysShareTable =
+			    ADDCOLUMNS(
+			        EmployeeEntries,
+			        "ActiveDays", DATEDIFF([EntryStart], [EntryEnd], DAY) + 1,
+			        "DaysShare", DIVIDE(DATEDIFF([EntryStart], [EntryEnd], DAY) + 1, TotalSelectedDays)
+			    )
+			
+			VAR TotalDaysShare = 
+			    SUMX(
+			        ActiveDaysShareTable,
+			        [DaysShare]
+			    )
+			
+			RETURN
+			TotalDaysShare
+			
+			```
+		lineageTag: db6ffc3c-2033-4ed3-b297-5cc229349196
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure MonthlyDays = COUNT('DATE'[Day of Week Number])
+		formatString: 0
+		lineageTag: 65344381-8f8a-41d8-963f-0b55c5762519
+
+	measure 'Non-working day' = [MonthlyDays] - SUM('DATE'[IsWorkingDay])
+		formatString: 0
+		lineageTag: 6886499b-3416-4377-a021-e6bf50ec8d04
+
+	measure MaxFinishedDateSelectedMonth = ```
+			
+			VAR Yesterday = TODAY()-1
+			VAR EOM_past = 
+			    EOMONTH(
+			        DATE(SELECTEDVALUE('DATE'[Year]), SELECTEDVALUE('DATE'[Month Number]), 1), 
+			        0
+			    )
+			RETURN
+			IF(Month(TODAY()) = SELECTEDVALUE('DATE'[Month Number]), Yesterday, EOM_past)
+			    // EOM_past
+			
+			//     ,
+			//     FILTER(
+			//         'Sync_Log',
+			//         'Sync_Log'[finished_date] < 
+			//         CALCULATE(
+			//             MAX('Sync_Log'[finished_date]),
+			//             FILTER(
+			//                 'Sync_Log',
+			//                 YEAR('Sync_Log'[finished_date]) = SELECTEDVALUE('DATE'[Year]) &&
+			//                 MONTH('Sync_Log'[finished_date]) = SELECTEDVALUE('DATE'[Month Number])
+			//             )
+			//         ) &&
+			//         YEAR('Sync_Log'[finished_date]) = SELECTEDVALUE('DATE'[Year]) &&
+			//         MONTH('Sync_Log'[finished_date]) = SELECTEDVALUE('DATE'[Month Number])
+			//     )
+			// )
+			
+			```
+		formatString: General Date
+		lineageTag: ef3a09e6-ef05-471e-8f38-1357759f511d
+
+	measure 'Latest Refresh' = ```
+			MAX('200_DWH FTS_TIMESHEETS'[FTS_UPLOAD_TIME])
+			
+			```
+		formatString: General Date
+		lineageTag: 4a169cc7-bf45-4802-8a27-671ae7d18e45
+
+	measure IsDateLessOrEqualSecondMax = ```
+			
+			VAR SecondMaxDate = [MaxFinishedDateSelectedMonth]
+			RETURN 
+			IF (
+			    SELECTEDVALUE('DATE'[Date]) <= SecondMaxDate,
+			    TRUE(),
+			    FALSE()
+			)
+			
+			```
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 56aed7d7-442b-49d4-9d72-dd885c92c9aa
+
+	measure ActiveDaysShare2 = ```
+			
+			VAR SelectedStartDate =
+			    CALCULATE(
+			        MIN('DATE2'[Date]),
+			        TREATAS(VALUES('Date'[Date]), 'DATE2'[Date])
+			    )
+			VAR SelectedEndDate =
+			    CALCULATE(
+			        MAX('DATE2'[Date]),
+			        TREATAS(VALUES('Date'[Date]), 'DATE2'[Date])
+			    )
+			
+			VAR TotalSelectedDays = DATEDIFF(SelectedStartDate, SelectedEndDate, DAY) + 1
+			
+			VAR EmployeeEntries =
+			    ADDCOLUMNS(
+			        FILTER(
+			            'EMPLOYEE2',
+			            'EMPLOYEE2'[DPE_VALID_FROM] <= SelectedEndDate &&
+			            (ISBLANK('EMPLOYEE2'[DPE_VALID_TO]) || 'EMPLOYEE2'[DPE_VALID_TO] >= SelectedStartDate)
+			        ),
+			        "EntryStart", MAX(SelectedStartDate, 'EMPLOYEE2'[DPE_VALID_FROM]),
+			        "EntryEnd", MIN(SelectedEndDate, COALESCE('EMPLOYEE2'[DPE_VALID_TO], SelectedEndDate))
+			    )
+			
+			VAR ActiveDaysShareTable =
+			    ADDCOLUMNS(
+			        EmployeeEntries,
+			        "ActiveDays", DATEDIFF([EntryStart], [EntryEnd], DAY) + 1,
+			        "DaysShare", DIVIDE(DATEDIFF([EntryStart], [EntryEnd], DAY) + 1, TotalSelectedDays)
+			    )
+			
+			VAR TotalDaysShare =
+			    SUMX(
+			        ActiveDaysShareTable,
+			        [DaysShare]
+			    )
+			
+			RETURN
+			TotalDaysShare
+			
+			```
+		lineageTag: 5d835bed-1944-436d-a0e4-28eddfc69e57
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Date Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

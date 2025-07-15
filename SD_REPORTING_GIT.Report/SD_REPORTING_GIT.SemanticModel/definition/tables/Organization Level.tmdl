@@ -1,0 +1,50 @@
+table 'Organization Level'
+	lineageTag: 3be61bac-2612-42b6-ad27-fd85695419c0
+
+	column OrgLevelParameter
+		lineageTag: 649c01a3-4dfe-46ff-a92e-1477af4a94b5
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'OrgLevelParameter Order'
+
+		relatedColumnDetails
+			groupByColumn: 'OrgLevelParameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'OrgLevelParameter Fields'
+		isHidden
+		lineageTag: 966b5263-2524-499f-a510-e11f72857acb
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'OrgLevelParameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'OrgLevelParameter Order'
+		isHidden
+		formatString: 0
+		lineageTag: 41971926-ebf4-4765-aab7-ae3ad4e6675d
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Organization Level' = calculated
+		mode: import
+		source =
+				{
+				    ("Company", NAMEOF('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 0),
+				    ("Department", NAMEOF('200_DWH DPE_EMPLOYEES'[DPE_DEPARMENT_ID]), 1),
+				    ("Team", NAMEOF('200_DWH DPE_EMPLOYEES'[TeamCorrected]), 2),
+				    ("Employee", NAMEOF('200_DWH DPE_EMPLOYEES'[DPE_FULLNAME]), 3)
+				}
+
+	annotation PBI_Id = f41122fa8d8e463bba0232ddbcd77596
+

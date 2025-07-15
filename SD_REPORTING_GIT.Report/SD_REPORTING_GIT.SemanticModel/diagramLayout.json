@@ -1,0 +1,396 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 481.262141996929
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 245.94867429460535,
+            "y": 478.99940785564229
+          },
+          "nodeIndex": "200_DWH DCO_COMPANIES",
+          "nodeLineageTag": "7bea4643-9264-49ab-8ee3-4c396370efe5",
+          "size": {
+            "height": 223.83465401224498,
+            "width": 278.96469747730339
+          },
+          "zIndex": 19
+        },
+        {
+          "location": {
+            "x": 1123.0533135991859,
+            "y": 468.84577575325909
+          },
+          "nodeIndex": "200_DWH DCU_CUSTOMERS",
+          "nodeLineageTag": "c2bb9958-d4e9-42fa-b86c-ae067a92ad94",
+          "size": {
+            "height": 145,
+            "width": 323.929394954607
+          },
+          "zIndex": 16
+        },
+        {
+          "location": {
+            "x": 78.411275866747545,
+            "y": 857.288184779485
+          },
+          "nodeIndex": "200_DWH DPE_EMPLOYEES",
+          "nodeLineageTag": "8e9ee816-3bb6-4457-a635-8bc5e3b400fa",
+          "size": {
+            "height": 791.8572683863747,
+            "width": 287.95763697276408
+          },
+          "zIndex": 27
+        },
+        {
+          "location": {
+            "x": 1150.271437035557,
+            "y": 1196.9571710544069
+          },
+          "nodeIndex": "200_DWH DWP_WORK_PACKAGE",
+          "nodeLineageTag": "8298b060-4c93-4136-b406-e009f41a49b7",
+          "size": {
+            "height": 446,
+            "width": 340.11668604643614
+          },
+          "zIndex": 25
+        },
+        {
+          "location": {
+            "x": 761.46025689725718,
+            "y": 658.32065071230977
+          },
+          "nodeIndex": "200_DWH FTS_TIMESHEETS",
+          "nodeLineageTag": "2e362f9a-92ac-4520-9c8a-5df9fc969b06",
+          "size": {
+            "height": 603.28950288224678,
+            "width": 262.77740638547425
+          },
+          "zIndex": 23
+        },
+        {
+          "location": {
+            "x": 1540.5115229237767,
+            "y": 607.47604839227472
+          },
+          "nodeIndex": "200_DWH DPO_PROJECTS",
+          "nodeLineageTag": "f009e227-e71a-4405-a8d5-8a2e04dea17d",
+          "size": {
+            "height": 454.16797628689989,
+            "width": 260.97881848638212
+          },
+          "zIndex": 26
+        },
+        {
+          "location": {
+            "x": 825.296946232236,
+            "y": 1499.0219531770813
+          },
+          "nodeIndex": "DATE",
+          "nodeLineageTag": "c018ab8f-f3b6-46d6-813b-a0ac8a58cfd0",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 24
+        },
+        {
+          "location": {
+            "x": 2748.3405448027693,
+            "y": 1043.0852086761106
+          },
+          "nodeIndex": "Master Data Measures",
+          "nodeLineageTag": "3711bc91-ad42-483f-8e8e-0abd7122a970",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 2155.0716199516664,
+            "y": 1033.2599568482742
+          },
+          "nodeIndex": "Date Measures",
+          "nodeLineageTag": "47dc5468-c5dc-492a-b2a0-3b98d061a4de",
+          "size": {
+            "height": 174.14492806459339,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 2975.8648020235669,
+            "y": 488.87131801284539
+          },
+          "nodeIndex": "Placeholder",
+          "nodeLineageTag": "d7b1b19e-1492-4796-b921-8e1ae0d713aa",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 3037.2291572879953,
+            "y": 1038.6773418595515
+          },
+          "nodeIndex": "SAP Category Measures",
+          "nodeLineageTag": "9c8aafb5-1296-4233-89ea-f9b21e12a1b7",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 3319.8198241407563,
+            "y": 1038.6773418595515
+          },
+          "nodeIndex": "Personio Category Measures",
+          "nodeLineageTag": "e26c0eb8-d97b-457c-8c3e-6b3a8b390969",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 3602.4104909935172,
+            "y": 1038.6773418595515
+          },
+          "nodeIndex": "Ratio Measures",
+          "nodeLineageTag": "caf592cd-9bf7-479a-8943-5d0d4dbc6d68",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 2453.8495778962565,
+            "y": 1044.0731055568278
+          },
+          "nodeIndex": "Timesheet Measures",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 2051.8652632894355,
+            "y": 1489.3098014855823
+          },
+          "nodeIndex": "200_DWH BPE_EMPLOYEES",
+          "nodeLineageTag": "949195dc-c85f-405c-b9f4-a81103ffefab",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 22
+        },
+        {
+          "location": {
+            "x": 1743.5720421082081,
+            "y": 1300.985115378905
+          },
+          "nodeIndex": "200_HSL Sync_Log",
+          "nodeLineageTag": "5bb9014c-c543-483e-9d14-a805c591d785",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 15
+        },
+        {
+          "location": {
+            "x": 3885.0011578462781,
+            "y": 1035.1395515155377
+          },
+          "nodeIndex": "KPIs_AGGREGATED",
+          "nodeLineageTag": "b6b65d14-dbee-4355-a29d-3db10e50a32c",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 3800.6798932842435,
+            "y": 1369.0624970705221
+          },
+          "nodeIndex": "Timesheets2",
+          "nodeLineageTag": "797026b4-98be-4875-9398-bb4784ad20d6",
+          "size": {
+            "height": 590.29357410299372,
+            "width": 234
+          },
+          "zIndex": 18
+        },
+        {
+          "location": {
+            "x": 4196.5815977798084,
+            "y": 1802.5139901961224
+          },
+          "nodeIndex": "DATE2",
+          "nodeLineageTag": "b1bdeb6b-e8ac-4d19-8402-488e67b7c14a",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 17
+        },
+        {
+          "location": {
+            "x": 3159.4958303514886,
+            "y": 1419.2807109429536
+          },
+          "nodeIndex": "EMPLOYEE2",
+          "nodeLineageTag": "51dd3a85-a935-467a-be4e-5e0763ddeaf0",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 4208.0612579742983,
+            "y": 1279.0922209844925
+          },
+          "nodeIndex": "Work_Packages2",
+          "nodeLineageTag": "1b5b6c64-1957-4499-a3ee-7eb52bab46ba",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 4413.64998210755,
+            "y": 1165.3862511208827
+          },
+          "nodeIndex": "DUMMY_TABLE1",
+          "nodeLineageTag": "aad0c941-92f5-4f1a-8d56-d599f9016c97",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 20
+        },
+        {
+          "location": {
+            "x": 4141.1849785238528,
+            "y": 1018.403835354552
+          },
+          "nodeIndex": "ZeigeModus",
+          "nodeLineageTag": "951365e5-6051-4859-80de-8be0947b8bfa",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 21
+        },
+        {
+          "location": {
+            "x": 442.13352392202097,
+            "y": 1514.5519033206238
+          },
+          "nodeIndex": "200_DWH FWL_WORKLOGS",
+          "nodeLineageTag": "d297fe2c-3ad3-46c5-9f18-b5ee2f04fd6e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 28
+        },
+        {
+          "location": {
+            "x": 5030.4161545073066,
+            "y": 1044.7626160848363
+          },
+          "nodeIndex": "HLS_last_timesheet_update",
+          "nodeLineageTag": "5e7ff824-3a38-49ac-92b1-2db799ab8e5b",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 5236.0048786405587,
+            "y": 975.3039826399089
+          },
+          "nodeIndex": "HLP_last_employee_update",
+          "nodeLineageTag": "ea97cba2-f459-4a9f-a265-28d6b35926f4",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 5441.5936027738107,
+            "y": 859.116032472518
+          },
+          "nodeIndex": "Last Power_BI Update",
+          "nodeLineageTag": "ba7828ae-78ac-47bd-99fb-8a955bd95b86",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4619.2387062408025,
+            "y": 1097.9388754680886
+          },
+          "nodeIndex": "Organization Level",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4824.8274303740545,
+            "y": 1067.0683717147876
+          },
+          "nodeIndex": "Date Dimension",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 62.336089590424159,
+      "pinKeyFieldsToTop": true,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

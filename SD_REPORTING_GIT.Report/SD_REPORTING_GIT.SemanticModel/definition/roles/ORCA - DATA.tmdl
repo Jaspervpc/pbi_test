@@ -1,0 +1,27 @@
+role 'ORCA - DATA'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' = ```
+			(
+			          [FTS_COMPANY] = "XIN"||  
+			          [FTS_COMPANY] = "ARS"||
+			           [FTS_COMPANY] = "TDE"||
+			            [FTS_COMPANY] = "BBI"||
+			          RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "XIN" || RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "ARS" || RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "TDE" || RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "BBI" 
+			        )
+			```
+
+	tablePermission '200_DWH FWL_WORKLOGS' =
+			(
+			    [FWL_COMPANY] = "XIN"
+			        || [FWL_COMPANY] = "ARS"
+			        || [FWL_COMPANY] = "TDE"
+			        || [FWL_COMPANY] = "BBI"
+			        || RELATED ( '200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID] ) = "XIN"
+			        || RELATED ( '200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID] ) = "ARS"
+			        || RELATED ( '200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID] ) = "TDE"
+			        || RELATED ( '200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID] ) = "BBI"
+			)
+
+	annotation PBI_Id = 318fc62588c648b3a05fcf8cc02b498f
+

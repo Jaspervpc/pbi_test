@@ -1,0 +1,92 @@
+table Work_Packages2
+	lineageTag: 1b5b6c64-1957-4499-a3ee-7eb52bab46ba
+
+	measure 'UNFILTERED_HRS.BUDGET.REMAINING' =
+			
+			VAR BudgetRemaining =
+			    CALCULATE(
+			        SUM(Work_Packages2[DWP_BUDGET_HOURS]),
+			        TREATAS(VALUES('200_DWH DWP_WORK_PACKAGE'[DWP_ID]), 'Work_Packages2'[DWP_ID])
+			    )
+			    - [UNFILTERED_HRS.BILL]
+			
+			RETURN BudgetRemaining
+		lineageTag: 2359e53b-f799-40c9-80ab-8418ffc865cd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DWP_ID
+		lineageTag: 7f986772-be50-4dcd-9892-676ffad0b22f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DWP_WORK_PACKAGE[DWP_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_PROJECT_ID
+		lineageTag: 48a3d050-0be0-41b2-8176-544d0401bc7c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DWP_WORK_PACKAGE[DWP_PROJECT_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_CATEGORY
+		lineageTag: 80f775db-b775-4903-a906-d3c5d19e89d6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DWP_WORK_PACKAGE[DWP_CATEGORY]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_NAME
+		lineageTag: a0b2aecf-30d3-40e1-8f51-c0d3b2f31e6f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DWP_WORK_PACKAGE[DWP_NAME]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_BUDGET_HOURS
+		lineageTag: b227352a-0b13-44e0-b313-427f45803ee1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DWP_WORK_PACKAGE[DWP_BUDGET_HOURS]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DWP_COMPANY_ID
+		lineageTag: 181ceff2-fcd5-42be-9857-7acfed354e26
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DWP_WORK_PACKAGE[DWP_COMPANY_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_IS_DELETED
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8961fc0d-49ed-4ccf-81a3-01c100532685
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DWP_WORK_PACKAGE[DWP_IS_DELETED]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_BONUS_RATE
+		lineageTag: 3e57e38c-b15d-406e-a9c1-9c2c7d715e7d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DWP_WORK_PACKAGE[DWP_BONUS_RATE]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Work_Packages2 = calculated
+		mode: import
+		source = '200_DWH DWP_WORK_PACKAGE'
+
+	annotation PBI_Id = 9e878a69cedd46ecb0dbd15f29255946
+

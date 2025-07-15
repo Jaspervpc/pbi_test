@@ -1,0 +1,7 @@
+role 'Jeanette Fuerst - ITAM'
+	modelPermission: read
+
+	tablePermission '200_DWH DPO_PROJECTS' = [DPO_PROJECT_MANAGER_ID] == "12315116"
+
+	annotation PBI_Id = 28edd60c12c8460c95e47363b2275e98
+

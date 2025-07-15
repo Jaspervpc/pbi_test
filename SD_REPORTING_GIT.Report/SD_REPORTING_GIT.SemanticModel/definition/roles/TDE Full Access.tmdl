@@ -1,0 +1,9 @@
+role 'TDE Full Access'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' = [FTS_COMPANY] = "TDE"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "TDE"
+
+	tablePermission '200_DWH FWL_WORKLOGS' = [FWL_COMPANY] = "TDE"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "TDE"
+
+	annotation PBI_Id = d2f7492ef59349848167bda4b6b94919
+

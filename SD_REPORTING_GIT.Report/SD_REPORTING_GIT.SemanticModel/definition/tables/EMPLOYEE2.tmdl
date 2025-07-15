@@ -1,0 +1,629 @@
+table EMPLOYEE2
+	lineageTag: 51dd3a85-a935-467a-be4e-5e0763ddeaf0
+
+	measure 'CO.FTE.CONTRACTED.HRS2' = ```
+			
+			CALCULATE(
+			    SUMX(
+			        FILTER(
+			            'EMPLOYEE2',
+			            [IsCurrentinDate2] = "TRUE" && 
+			            [IsEmployeedDateInRange2] = "TRUE" && 
+			            'EMPLOYEE2'[DPE_BILLABLE] = TRUE()
+			        ),
+			        'EMPLOYEE2'[DPE_DAILY_WORKING_HOURS] * [ActiveDaysShare2]
+			    ) * 
+			    COUNTROWS(
+			        FILTER(
+			            'DATE2',
+			            'DATE2'[IsWorkingDay] = 1
+			        ))
+			    ,
+			    VALUES('DATE2'[Month Number]),
+			     TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			```
+		lineageTag: bfb5926c-ae31-492f-be85-88ebbc96c3d6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.WORKING.PAID2' = ```
+			
+			SUMX(
+			    FILTER(
+			        'EMPLOYEE2',
+			        [IsCurrentinDate2] = "TRUE" && [IsEmployeedDateInRange2] = "TRUE" && 'EMPLOYEE2'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [CO.FTE.CONTRACTED.HRS2] -
+			        [CO.HRS.PERCAT.CHILDCARE2] -
+			        [CO.HRS.PERCAT.FAMILYCARE2] -
+			        [CO.HRS.PERCAT.HOL2] -
+			        [CO.HRS.PERCAT.MAT.PAT.LEAVE2] -
+			        [CO.HRS.PERCAT.OTHER2] -
+			        [CO.HRS.PERCAT.PAIDVAC2] -
+			        [CO.HRS.PERCAT.UNPAIDVAC2]
+			    ) 
+			)
+			
+			```
+		lineageTag: 8aa77acb-e76a-4fe8-a300-5937219400d2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.WORKING.AVAILABLE2' = ```
+			
+			SUMX(
+			    FILTER(
+			        'EMPLOYEE2',
+			        [IsCurrentinDate2] = "TRUE" && [IsEmployeedDateInRange2] = "TRUE" && 'EMPLOYEE2'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [CO.HRS.WORKING.PAID2] -
+			        [CO.HRS.PERCAT.SICK2]
+			    ) 
+			)
+			
+			```
+		lineageTag: bca12ca5-75af-41a8-9de6-a779245ab922
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.FTE.CONTRACTED.HRS2' = ```
+			
+			CALCULATE(
+			    SUMX(
+			        FILTER(
+			            'EMPLOYEE2',
+			            [IsCurrentinDate2] = "TRUE" && 
+			            [IsEmployeedDateInRange2] = "TRUE" && 
+			            'EMPLOYEE2'[DPE_BILLABLE] = TRUE()
+			        ),
+			        'EMPLOYEE2'[DPE_DAILY_WORKING_HOURS] * [ActiveDaysShare2]
+			    ) * 
+			    COUNTROWS(
+			        FILTER(
+			            'DATE2',
+			            'DATE2'[IsWorkingDay] = 1
+			        ))
+			    ,
+			    VALUES('DATE2'[Month Number]),
+			     TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			```
+		lineageTag: d6ce7a6c-5a1f-4f79-a462-ca45b138568b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.WORKING.PAID2' = ```
+			
+			SUMX(
+			    FILTER(
+			        'EMPLOYEE2',
+			        [IsCurrentinDate2] = "TRUE" && [IsEmployeedDateInRange2] = "TRUE" && 'EMPLOYEE2'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [DE.FTE.CONTRACTED.HRS2] -
+			        [DE.HRS.PERCAT.CHILDCARE2] -
+			        [DE.HRS.PERCAT.FAMILYCARE2] -
+			        [DE.HRS.PERCAT.HOL2] -
+			        [DE.HRS.PERCAT.MAT.PAT.LEAVE2] -
+			        [DE.HRS.PERCAT.OTHER2] -
+			        [DE.HRS.PERCAT.PAIDVAC2] -
+			        [DE.HRS.PERCAT.UNPAIDVAC2]
+			    ) 
+			)
+			
+			```
+		lineageTag: a9e2b1ce-145e-49e5-91fb-03a639a2dffe
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.WORKING.AVAILABLE2' = ```
+			
+			SUMX(
+			    FILTER(
+			        'EMPLOYEE2',
+			        [IsCurrentinDate2] = "TRUE" && [IsEmployeedDateInRange2] = "TRUE" && 'EMPLOYEE2'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [DE.HRS.WORKING.PAID2] -
+			        [DE.HRS.PERCAT.SICK2]
+			    ) 
+			)
+			
+			```
+		lineageTag: e79efaef-0ed4-4f39-83d1-ef33a87e8ae0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.WORKING.AVAILABLE.CB' =
+			
+			[DE.HRS.WORKING.AVAILABLE2] *[DE_CALC.BASED.FACTOR]
+		lineageTag: c8895e82-5017-4bdf-878a-e49559612e9a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.WORKING.PAID.CB' =
+			
+			[DE_CALC.BASED.FACTOR] *[DE.HRS.WORKING.PAID2]
+		lineageTag: 5fb880f6-e56f-409e-a3ec-9896ff417b3e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.WORKING.PAID.CB' =
+			
+			[CO_CALC.BASED.FACTOR] *[CO.HRS.WORKING.PAID2]
+		lineageTag: 227b7bde-2b49-43e8-8be4-0a9b396a3dfa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.WORKING.AVAILABLE.CB' =
+			
+			[CO.HRS.WORKING.AVAILABLE2] *[CO_CALC.BASED.FACTOR]
+		lineageTag: ae5807d3-5558-4d8f-8fdf-e79759047bed
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO_Contracted X Planned FTE' =
+			
+			CALCULATE(
+			    SUMX(
+			        'EMPLOYEE2',
+			        'EMPLOYEE2'[DPE_FTE]
+			        * 'EMPLOYEE2'[Test PlannedFTE_Adjusted]
+			        * [ActiveDaysShare2]
+			    ),
+			    FILTER(
+			        'EMPLOYEE2',
+			        [IsCurrentinDate2] = "TRUE" &&
+			        [CO.FTE.CONTRACTED.HRS2] > 0
+			    ),
+			    TREATAS(VALUES('Date'[Date]), 'DATE2'[Date]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			)
+		lineageTag: a6bab786-d025-4c70-a471-a07aa3dd2f52
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE_Contracted X Planned FTE' = ```
+			
+			CALCULATE(
+			    SUMX(
+			        'EMPLOYEE2',
+			        'EMPLOYEE2'[DPE_FTE]
+			        * 'EMPLOYEE2'[Test PlannedFTE_Adjusted]
+			        * [ActiveDaysShare2]
+			    ),
+			    FILTER(
+			        'EMPLOYEE2',
+			        [IsCurrentinDate2] = "TRUE" &&
+			        [DE.FTE.CONTRACTED.HRS2] > 0
+			    ),
+			    TREATAS(VALUES('Date'[Date]), 'DATE2'[Date]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			)
+			
+			```
+		lineageTag: 2b240e90-a17a-423f-93c9-2013430d75f7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO_SUM.CONTRACTED.FTE' = ```
+			CALCULATE(
+			    SUMX(
+			        'EMPLOYEE2',
+			        'EMPLOYEE2'[DPE_FTE] * [ActiveDaysShare2]
+			    ),
+			    FILTER(
+			        'EMPLOYEE2',
+			        [IsCurrentinDate2] = "TRUE" && [CO.FTE.CONTRACTED.HRS2] > 0
+			    ),
+			    TREATAS(VALUES('Date'[Date]), 'DATE2'[Date]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			)
+			
+			```
+		lineageTag: 560857b9-e2af-4674-af31-d3a8a4c257f9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE_SUM.CONTRACTED.FTE' = ```
+			
+			CALCULATE(
+			    SUMX(
+			        'EMPLOYEE2',
+			        'EMPLOYEE2'[DPE_FTE] * [ActiveDaysShare2]
+			    ),
+			    FILTER(
+			        'EMPLOYEE2',
+			        [IsCurrentinDate2] = "TRUE" && [DE.FTE.CONTRACTED.HRS2] > 0
+			    ),
+			    TREATAS(VALUES('Date'[Date]), 'DATE2'[Date]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group]),
+			    TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			)
+			
+			```
+		lineageTag: 393f2265-d49b-472f-851b-1b5dc14cd64b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DPE_ISCURRENT
+		lineageTag: cf94e911-743c-4d28-9443-7bcb7eea978e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_ISCURRENT]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_SUBCOMPANY_ID
+		lineageTag: a5477a8e-20ac-4f77-8745-e13ad3026d2a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_SUBCOMPANY_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_EXIT_DATE
+		formatString: General Date
+		lineageTag: a1c4b4c5-da6a-4b9d-affb-afbee7d60f78
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_EXIT_DATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_EMPLOYEE_ID
+		lineageTag: f55410b6-057c-4d59-b63d-9a4456e92b91
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_EMPLOYEE_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_POSITION
+		lineageTag: be21ed8f-1963-49b0-b748-f630ab8cdb9e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_POSITION]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_COST_CENTER_ID
+		lineageTag: eeb089b2-049e-46dc-b68b-3b7311f2edd5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_COST_CENTER_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_WEEKLY_WORKING_HOURS
+		lineageTag: a4757c13-71aa-4990-bbd4-b6fa8cefaa7b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_WEEKLY_WORKING_HOURS]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DPE_VALID_FROM
+		formatString: General Date
+		lineageTag: bad319d4-21fd-4d16-81c7-629cb0f3790b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_VALID_FROM]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_BILLABLE
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 08f1cb0d-35ea-4fca-ab04-531d61af225c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_BILLABLE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_PERMANENT
+		lineageTag: 906a0ddb-339a-48ee-88d4-97d74491d2e8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_PERMANENT]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_FIRST_ENTRY_DATE
+		formatString: General Date
+		lineageTag: c459792e-a271-4f9f-884e-c1235c1247b3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_FIRST_ENTRY_DATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_GENDER
+		lineageTag: 87780cb7-28ef-4ad0-8b80-92c902bdbcb1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_GENDER]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_TERMINATION_TYPE
+		lineageTag: 232ce137-38fe-4bfb-82e9-358691fd870b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_TERMINATION_TYPE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_MAIL
+		lineageTag: efd4bdc2-4ad0-4bf2-81c8-196f0231e2e1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_MAIL]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_VALID_TO
+		formatString: General Date
+		lineageTag: d89d759e-e090-405e-9e9d-16a6fe937816
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_VALID_TO]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_COST_CENTER_NAME
+		lineageTag: 98d410dd-566f-43c6-9fbc-44fc48eab61a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_COST_CENTER_NAME]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_SURROGATE
+		lineageTag: fcdd8ef3-430e-4857-baae-a2bb36bc358a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_SURROGATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_FTE
+		lineageTag: 4443b938-140e-41d9-9f68-b7a8d8aeefc6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_FTE]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DPE_UPLOAD_DATE
+		formatString: General Date
+		lineageTag: 8b0963af-1a4e-41f6-8e27-f2f431578044
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_UPLOAD_DATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_HIRE_DATE
+		lineageTag: 513c4e45-3b5c-409e-ae21-28cb68656a3f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_HIRE_DATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_COST_CENTER_WEIGHT
+		lineageTag: cd8e7a30-de3b-475f-83cf-371f0d36d2f0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_COST_CENTER_WEIGHT]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DPE_RANK
+		formatString: 0
+		lineageTag: 4d759f53-bc17-40f1-ae19-00c6edea55f2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_RANK]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_ENTRY_DATE
+		formatString: General Date
+		lineageTag: 92894c68-3c79-45a2-b7f4-690e0682ddf7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_ENTRY_DATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_EMPLOYEE_FUNCTION
+		lineageTag: b29a3de4-efa3-4b6d-b44e-d90680d05133
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_EMPLOYEE_FUNCTION]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_DEPARMENT_ID
+		lineageTag: 60b68b5b-0fe0-4e8e-874d-6893b06c6a68
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_DEPARMENT_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_SURNAME
+		lineageTag: 589841dd-7727-4663-80d8-b9bd556b63bf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_SURNAME]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_NAME
+		lineageTag: 17562df6-b2e1-4b44-87d2-ad43b046f501
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_NAME]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_FULLNAME
+		lineageTag: 785e4a48-fcb7-42fe-baab-d1d34f25e145
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_FULLNAME]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_PROFESSIONAL
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d36387b5-6c63-425b-8582-67eb09c1c79b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_PROFESSIONAL]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_DAILY_WORKING_HOURS
+		lineageTag: c1365565-ff1e-4e7c-951c-d3a4e9fc14d9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_DAILY_WORKING_HOURS]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DPE_SUPERVISOR_ID
+		lineageTag: cac1e94b-6e78-4a00-a25a-c7ddf2f91c94
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_SUPERVISOR_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Path
+		lineageTag: d39e0b8b-718d-4e62-8991-654305add000
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[Path]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pathlength
+		formatString: 0
+		lineageTag: b880799e-0a74-4159-be20-b9ff3e4cba9b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[Pathlength]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Department Group'
+		lineageTag: a09057ff-53e2-432b-b931-098429fa9b82
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[Department Group]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSupervisor
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 542d1b52-a8c8-4573-af2f-c17685ad5595
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[IsSupervisor]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_PLAN_FTE
+		lineageTag: b2b76664-e440-4bfd-a6ad-94a30367962c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_PLAN_FTE]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IsProjectManager
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0bf02de0-1515-4967-a5c0-9153b98705a9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[IsProjectManager]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Test PlannedFTE_Adjusted'
+		lineageTag: f3a7c87c-e701-4f97-af85-d75bae4d4355
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[Test PlannedFTE_Adjusted]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InTimesheets
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 699d4b89-8c2d-4925-bd7d-86e66350c563
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[InTimesheets]
+
+		annotation SummarizationSetBy = Automatic
+
+	column InEmployeeID
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 256211bf-a957-4864-a732-948c70dff56f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[InEmployeeID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_TEAM
+		lineageTag: 1b598ce5-131b-4be0-9b05-225e85bbd734
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[DPE_TEAM]
+
+		annotation SummarizationSetBy = Automatic
+
+	column TeamCorrected
+		lineageTag: 3f7cab4b-e10c-4b67-bc29-7f58c582a6c4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH DPE_EMPLOYEES[TeamCorrected]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition EMPLOYEE2 = calculated
+		mode: import
+		source = '200_DWH DPE_EMPLOYEES'
+
+	annotation PBI_Id = 0f006d2d7d9e47d2888ba192d578b0a4
+

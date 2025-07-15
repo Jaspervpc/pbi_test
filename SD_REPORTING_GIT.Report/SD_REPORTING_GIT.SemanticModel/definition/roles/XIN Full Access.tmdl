@@ -1,0 +1,9 @@
+role 'XIN Full Access'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' = [FTS_COMPANY] = "XIN"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "XIN"
+
+	tablePermission '200_DWH FWL_WORKLOGS' = [FWL_COMPANY] = "XIN"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "XIN"
+
+	annotation PBI_Id = feb9816a6a204e798629bcbc9093d4c1
+

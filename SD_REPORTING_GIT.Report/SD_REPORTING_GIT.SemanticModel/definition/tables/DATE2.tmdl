@@ -1,0 +1,206 @@
+table DATE2
+	lineageTag: b1bdeb6b-e8ac-4d19-8402-488e67b7c14a
+
+	measure IsCurrentinDate2 = ```
+			
+			VAR SelectedStartDate =
+			    CALCULATE(
+			        MIN('DATE2'[Date]),
+			        TREATAS(VALUES('Date'[Date]), 'DATE2'[Date])
+			    )
+			VAR SelectedEndDate =
+			    CALCULATE(
+			        MAX('DATE2'[Date]),
+			        TREATAS(VALUES('Date'[Date]), 'DATE2'[Date])
+			    )
+			
+			VAR TotalSelectedDays = DATEDIFF(SelectedStartDate, SelectedEndDate, DAY) + 1
+			
+			VAR EmployeeEntries =
+			    ADDCOLUMNS(
+			        FILTER(
+			            'EMPLOYEE2',
+			            'EMPLOYEE2'[DPE_VALID_FROM] <= SelectedEndDate &&
+			            (ISBLANK('EMPLOYEE2'[DPE_VALID_TO]) || 'EMPLOYEE2'[DPE_VALID_TO] >= SelectedStartDate)
+			        ),
+			        "ActiveDays",
+			        VAR EntryStart = MAX(SelectedStartDate, 'EMPLOYEE2'[DPE_VALID_FROM])
+			        VAR EntryEnd = MIN(SelectedEndDate, COALESCE('EMPLOYEE2'[DPE_VALID_TO], SelectedEndDate))
+			        RETURN DATEDIFF(EntryStart, EntryEnd, DAY) + 1
+			    )
+			
+			VAR TotalActiveDays =
+			    SUMX(
+			        EmployeeEntries,
+			        [ActiveDays]
+			    )
+			
+			VAR IsActiveEmployee = IF(TotalActiveDays > 0, "TRUE", "FALSE")
+			
+			RETURN
+			IsActiveEmployee
+			
+			```
+		lineageTag: b86d4314-91a3-4683-bf7f-b6b351eb3901
+
+	measure IsEmployeedDateInRange2 = ```
+			
+			// VAR SelectedStartDate = CALCULATE(MIN('DATE2'[Date]), ALLSELECTED('DATE2'))
+			// VAR SelectedEndDate = CALCULATE(MAX('DATE2'[Date]), ALLSELECTED('DATE2'))
+			
+			// VAR EmployeeEntries = 
+			//     FILTER(
+			//         'EMPLOYEE2',
+			//         'EMPLOYEE2'[DPE_ENTRY_DATE] <= SelectedEndDate &&
+			//         (ISBLANK('EMPLOYEE2'[DPE_EXIT_DATE]) || 'EMPLOYEE2'[DPE_EXIT_DATE] >= SelectedStartDate)
+			//     )
+			
+			// RETURN
+			// IF(
+			//     COUNTROWS(EmployeeEntries) > 0,
+			//     "TRUE",
+			//     "FALSE"
+			// )
+			
+			VAR SelectedStartDate =
+			    CALCULATE(
+			        MIN('DATE2'[Date]),
+			        TREATAS(VALUES('Date'[Date]), 'DATE2'[Date])
+			    )
+			VAR SelectedEndDate =
+			    CALCULATE(
+			        MAX('DATE2'[Date]),
+			        TREATAS(VALUES('Date'[Date]), 'DATE2'[Date])
+			    )
+			VAR EmployeeEntries =
+			    FILTER(
+			        'EMPLOYEE2',
+			        'EMPLOYEE2'[DPE_ENTRY_DATE] <= SelectedEndDate &&
+			        (
+			            ISBLANK('EMPLOYEE2'[DPE_EXIT_DATE]) ||
+			            'EMPLOYEE2'[DPE_EXIT_DATE] >= SelectedStartDate
+			        )
+			    )
+			RETURN
+			IF(
+			    COUNTROWS(EmployeeEntries) > 0,
+			    "TRUE",
+			    "FALSE"
+			)
+			
+			
+			```
+		lineageTag: 9321a06d-4e1e-42b0-921b-1ce1e57666ed
+
+	column Date
+		formatString: General Date
+		lineageTag: b960baae-4944-41b1-9ac0-8b4eb264b266
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 437294b7-2879-4e08-b11c-20d87ffc73fa
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 9f64f71d-ba58-40ab-9a3a-fde633494be1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Month Number'
+		lineageTag: adc3f737-2c70-4717-82a3-abcc21f99b67
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Month Number]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Month Name'
+		lineageTag: dd16bea4-5213-404d-ac2b-f1b5584869d4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Month Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day of Week Number'
+		formatString: 0
+		lineageTag: 2ffdf631-3fcb-48d1-a8fd-a157cbbc4ebd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Day of Week Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day of Week Name'
+		lineageTag: 118c497c-5956-4165-a71b-b5437ce1bcfb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Day of Week Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week of Year'
+		lineageTag: 3bee7f44-c6ab-4cd2-9c9e-c4e72b222308
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Week of Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWorkingDay
+		formatString: 0
+		lineageTag: 6779b8fc-642c-4354-ac2d-c1eaa6274164
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[IsWorkingDay]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Slicer Date'
+		lineageTag: 326943f0-2a7d-417e-afbf-d08f1ac51324
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[Slicer Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuarterSort
+		lineageTag: eca3b3e6-c41b-45f0-9eab-3d7d554c542a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[QuarterSort]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column QuarterLabel
+		lineageTag: ee9a0998-2452-4cf6-8c53-102c80a842ae
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DATE[QuarterLabel]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DATE2 = calculated
+		mode: import
+		source = 'DATE'
+
+	annotation PBI_Id = da23ab2d6e41420cb27d248c03970dae
+

@@ -1,0 +1,9 @@
+role 'TGG Full Access (2)'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' = [FTS_COMPANY] = "TGG"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "TGG"
+
+	tablePermission '200_DWH FWL_WORKLOGS' = [FWL_COMPANY] = "TGG"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "TGG"
+
+	annotation PBI_Id = cf6f70af277a45339c70970fc34ec83a
+
