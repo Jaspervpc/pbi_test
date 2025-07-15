@@ -1,0 +1,30 @@
+role CEO
+	modelPermission: read
+
+	tablePermission '200_DWH DCO_COMPANIES' = ```
+			VAR CurrentUserSubcompany = 
+			    CALCULATE(
+			        SELECTEDVALUE('200_DWH DCO_COMPANIES'[DCO_BRAND]),
+			        FILTER(
+			      '200_DWH DPE_EMPLOYEES',
+			            '200_DWH DPE_EMPLOYEES'[DPE_MAIL]= USERPRINCIPALNAME()
+			        )
+			    )
+			VAR CurrentUserPathLength = 
+			    CALCULATE(
+			        SELECTEDVALUE('200_DWH DPE_EMPLOYEES'[Pathlength]),
+			        FILTER(
+			            '200_DWH DPE_EMPLOYEES',
+			            '200_DWH DPE_EMPLOYEES'[DPE_MAIL] = USERPRINCIPALNAME()
+			        )
+			    )
+			RETURN
+			    IF(
+			        CurrentUserPathLength = 1,
+			        CONTAINSSTRING([DCO_BRAND], CurrentUserSubcompany),
+			        FALSE
+			    )
+			```
+
+	annotation PBI_Id = 0b84a97dc8584d5e922ccbd78e712ef7
+

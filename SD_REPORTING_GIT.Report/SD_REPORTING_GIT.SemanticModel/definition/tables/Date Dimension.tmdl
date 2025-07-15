@@ -1,0 +1,49 @@
+table 'Date Dimension'
+	lineageTag: d63a9f8f-8f72-4439-8090-768c554451bb
+
+	column DateDimensionParameter
+		lineageTag: fc728b5d-d480-4d90-9d49-a85b647edc50
+		summarizeBy: none
+		sourceColumn: [Value1]
+
+		relatedColumnDetails
+			groupByColumn: 'DateDimensionParameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DateDimensionParameter Fields'
+		isHidden
+		lineageTag: bc587de9-0b79-42b2-9ed5-97a5b1f76b23
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'DateDimensionParameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DateDimensionParameter Order'
+		isHidden
+		formatString: 0
+		lineageTag: 24dab3ee-8deb-44eb-a3ee-7c6e47af8bd0
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Date Dimension' = calculated
+		mode: import
+		source = ```
+				{
+				    ("Month", NAMEOF('DATE'[Month Name]), 0),
+				    ("Quarter", NAMEOF('DATE'[QuarterLabel]), 1)
+				}
+				
+				```
+
+	annotation PBI_Id = e317565e327d435b839a991fd22ba42e
+

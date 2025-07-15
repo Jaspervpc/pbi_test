@@ -1,0 +1,226 @@
+table '200_DWH FTS_TIMESHEETS'
+	lineageTag: 2e362f9a-92ac-4520-9c8a-5df9fc969b06
+
+	column FTS_ABSENCE_STATUS
+		dataType: string
+		lineageTag: a94859b8-e0f0-4004-9e0f-a213df77d429
+		summarizeBy: none
+		sourceColumn: FTS_ABSENCE_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_PERSONIO_ID
+		dataType: string
+		lineageTag: de3d6fcc-4d25-4947-a228-268db2019d34
+		summarizeBy: none
+		sourceColumn: FTS_PERSONIO_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_ABSENCE_FRACTION
+		dataType: string
+		lineageTag: dbbacfe6-ad66-4ae4-b2d5-b004f8138eaa
+		summarizeBy: none
+		sourceColumn: FTS_ABSENCE_FRACTION
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_BILLABLE
+		dataType: string
+		lineageTag: 0b9c4605-82a8-4190-8203-780f6a2215f2
+		summarizeBy: none
+		sourceColumn: FTS_BILLABLE
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_DESCRIPTION
+		dataType: string
+		lineageTag: 47d53b14-3cd3-415c-9555-253764f38935
+		summarizeBy: none
+		sourceColumn: FTS_DESCRIPTION
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_WORK_PACKAGE_ID
+		dataType: string
+		lineageTag: efea6969-8a7d-40cd-9e8f-73c805649d86
+		summarizeBy: none
+		sourceColumn: FTS_WORK_PACKAGE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_RECORDED_HOURS
+		dataType: double
+		lineageTag: 7523c9f0-1c86-44f6-ac67-c5f4e1f48698
+		summarizeBy: sum
+		sourceColumn: FTS_RECORDED_HOURS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FTS_TIMESHEET_DATE
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5c74ef3b-7c6a-465c-84c9-ca6f780ab986
+		summarizeBy: none
+		sourceColumn: FTS_TIMESHEET_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column FTS_ACTIVITY_TYPE
+		dataType: string
+		lineageTag: 56c235c1-2321-41c4-9631-61ad63ec5cc8
+		summarizeBy: none
+		sourceColumn: FTS_ACTIVITY_TYPE
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_CREATED_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b21857c1-edc9-4520-93a9-88dd92cabd9a
+		summarizeBy: none
+		sourceColumn: FTS_CREATED_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_TIMESHEET_ID
+		dataType: string
+		lineageTag: 2f0be330-fc72-4e6c-a73b-13b61adcad1e
+		summarizeBy: none
+		sourceColumn: FTS_TIMESHEET_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_COMPANY_ID
+		dataType: string
+		lineageTag: d136b71e-2c7f-4213-bfa1-ec16c8da2d26
+		summarizeBy: none
+		sourceColumn: FTS_COMPANY_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_CATEGORY = RELATED('200_DWH DWP_WORK_PACKAGE'[DWP_CATEGORY])
+		lineageTag: 3f7ab870-7472-4a45-844a-ba877618427b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_UPLOAD_TIME
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5b85a975-dd6e-4614-86d6-bbf0aa0289d2
+		summarizeBy: none
+		sourceColumn: FTS_UPLOAD_TIME
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_SURROGATE_KEY
+		dataType: string
+		lineageTag: 129d7aa7-da95-42cc-a77d-e4cd64927244
+		summarizeBy: none
+		sourceColumn: FTS_SURROGATE_KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_COMPANY = RELATED('200_DWH DWP_WORK_PACKAGE'[DWP_COMPANY_ID])
+		lineageTag: 3996eb21-93d1-4e7c-9389-66d7e0dac9be
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable_hours = CALCULATE(Sum('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]), ISBLANK('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE]))
+		lineageTag: b63789d7-338f-4d19-9ed1-3117a3bfeca6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Non_billable Hours'
+		type: calculated
+		lineageTag: 01c0d268-2aaa-4f75-a16b-af841da59c83
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":"CALCULATE(SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]), NOT(ISBLANK('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = \"NON_BILL\")))"}
+
+		annotation 277cc1b9-af89-4597-8e15-cacc25c0886b = ```
+				A circular dependency was detected: 200_DWH FTS_TIMESHEETS[Non_billable Hours], 200_DWH FTS_TIMESHEETS[Billable_hours], 200_DWH FTS_TIMESHEETS[Non_billable Hours].
+				
+				```
+
+	column FTS_REVIEW_REQUIRED
+		dataType: string
+		lineageTag: 49a92d3a-d753-43b0-bb10-ef1c589aaa9c
+		summarizeBy: none
+		sourceColumn: FTS_REVIEW_REQUIRED
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_OVERBOOKED
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7ea8a617-1517-4a67-8c0f-26b3bdbe5cf0
+		summarizeBy: none
+		sourceColumn: FTS_OVERBOOKED
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_UPDATED_AT
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3cad921b-ccab-4280-bd0a-e4645dfbd951
+		summarizeBy: none
+		sourceColumn: FTS_UPDATED_AT
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_BILLED_STATUS
+		dataType: string
+		lineageTag: b9e2ad41-0c17-403b-9d54-507d3cc4acaf
+		summarizeBy: none
+		sourceColumn: FTS_BILLED_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_BILLED_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0994478d-9fb3-4738-89aa-bda4e92ace44
+		summarizeBy: none
+		sourceColumn: FTS_BILLED_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_INVOICED_HOURS
+		dataType: double
+		lineageTag: bfebcfc6-1fcc-4adc-b526-11e11814a2f3
+		summarizeBy: sum
+		sourceColumn: FTS_INVOICED_HOURS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition '200_DWH FTS_TIMESHEETS' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				      #"200_DWH_FTS_TIMESHEETS" = Source{[Schema="200_DWH",Item="FTS_TIMESHEETS"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"200_DWH_FTS_TIMESHEETS",{{"FTS_TIMESHEET_DATE", type date}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [FTS_TIMESHEET_ID] <> "000000000359" and [FTS_TIMESHEET_ID] <> "000000000360" and [FTS_TIMESHEET_ID] <> "000000000361" and [FTS_TIMESHEET_ID] <> "000000000350"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"FTS_PROJECT_ID", "FTS_CUSTOMER_ID"}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Removed Columns", each [FTS_SURROGATE_KEY] <> null and [FTS_SURROGATE_KEY] <> "")
+				in
+				    #"Filtered Rows1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,124 @@
+DEFINE
+	VAR __DS0FilterTable = 
+		FILTER(
+			KEEPFILTERS(VALUES('200_DWH DCU_CUSTOMERS'[DCU_NAME])),
+			NOT('200_DWH DCU_CUSTOMERS'[DCU_NAME] IN {BLANK()})
+		)
+
+	VAR __DS0FilterTable2 = 
+		TREATAS({"SYN"}, '200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID])
+
+	VAR __DS0FilterTable3 = 
+		TREATAS({2024}, 'DATE'[Year])
+
+	VAR __DS0FilterTable4 = 
+		FILTER(
+			KEEPFILTERS(VALUES('DATE'[Date])),
+			AND('DATE'[Date] >= DATE(2024, 12, 1), 'DATE'[Date] < DATE(2024, 12, 9))
+		)
+
+	VAR __DS0FilterTable5 = 
+		TREATAS({"In Execution"}, '200_DWH DPO_PROJECTS'[DPO_STATUS])
+
+	VAR __DS0FilterTable6 = 
+		TREATAS({TRUE}, '200_DWH DPE_EMPLOYEES'[DPE_BILLABLE])
+
+	VAR __DS0FilterTable7 = 
+		TREATAS({"C"}, '200_DWH DPO_PROJECTS'[DPO_CATEGORY])
+
+	VAR __DM3FilterTable = 
+		TREATAS(
+			{"beBOLD GmbH",
+				"novaCapta GmbH",
+				"Trafineo Service GmbH",
+				"Flughafen München GmbH",
+				"TIMETOACT Group GmbH",
+				"ANWR Media GmbH"},
+			'200_DWH DCU_CUSTOMERS'[DCU_NAME]
+		)
+
+	VAR __DM5FilterTable = 
+		TREATAS(
+			{("beBOLD GmbH", "SIGNAL IDUNA.Beratung Migration WAS"),
+				("novaCapta GmbH", "MS746 / Toyota MS IBM MQ (XI)"),
+				("Trafineo Service GmbH", "Managed Support & Services EV 2024"),
+				("Flughafen München GmbH", "IBM ACE, MQ und ILMT"),
+				("ANWR Media GmbH", "Verlängerung Monitoring Sept-Dez 2024"),
+				("ANWR Media GmbH", "ANWR Media GmbH -Managed Service Vertrag")},
+			'200_DWH DCU_CUSTOMERS'[DCU_NAME],
+			'200_DWH DPO_PROJECTS'[DPO_NAME]
+		)
+
+	VAR __ValueFilterDM5 = 
+		FILTER(
+			KEEPFILTERS(
+				SUMMARIZECOLUMNS(
+					'200_DWH DCU_CUSTOMERS'[DCU_NAME],
+					'200_DWH DPO_PROJECTS'[DPO_NAME],
+					'200_DWH DPE_EMPLOYEES'[DPE_FULLNAME],
+					__DS0FilterTable,
+					__DS0FilterTable2,
+					__DS0FilterTable3,
+					__DS0FilterTable4,
+					__DS0FilterTable5,
+					__DS0FilterTable6,
+					__DS0FilterTable7,
+					"HRS_BILL", 'Timesheet Measures'[HRS.BILL],
+					"HRS_NON_BILL", 'Timesheet Measures'[HRS.NON.BILL],
+					"HRS_BOOKED", 'Timesheet Measures'[HRS.BOOKED]
+				)
+			),
+			[HRS_BOOKED] > 0
+		)
+
+	VAR __DS0Core = 
+		SUMMARIZECOLUMNS(
+			ROLLUPADDISSUBTOTAL(
+				'200_DWH DCU_CUSTOMERS'[DCU_NAME], "IsGrandTotalRowTotal",
+				'200_DWH DPO_PROJECTS'[DPO_NAME], "IsDM1Total", NONVISUAL(__DM3FilterTable),
+				'200_DWH DPE_EMPLOYEES'[DPE_FULLNAME],
+				"IsDM3Total",
+				NONVISUAL(__DM3FilterTable),
+				NONVISUAL(__DM5FilterTable)
+			),
+			__DS0FilterTable,
+			__DS0FilterTable2,
+			__DS0FilterTable3,
+			__DS0FilterTable4,
+			__DS0FilterTable5,
+			__DS0FilterTable6,
+			__DS0FilterTable7,
+			__ValueFilterDM5,
+			"HRS_BILL", 'Timesheet Measures'[HRS.BILL],
+			"HRS_NON_BILL", 'Timesheet Measures'[HRS.NON.BILL],
+			"HRS_BOOKED", 'Timesheet Measures'[HRS.BOOKED]
+		)
+
+	VAR __DS0PrimaryWindowed = 
+		TOPN(
+			502,
+			__DS0Core,
+			[IsGrandTotalRowTotal],
+			0,
+			'200_DWH DCU_CUSTOMERS'[DCU_NAME],
+			1,
+			[IsDM1Total],
+			0,
+			'200_DWH DPO_PROJECTS'[DPO_NAME],
+			1,
+			[IsDM3Total],
+			0,
+			'200_DWH DPE_EMPLOYEES'[DPE_FULLNAME],
+			1
+		)
+
+EVALUATE
+	__DS0PrimaryWindowed
+
+ORDER BY
+	[IsGrandTotalRowTotal] DESC,
+	'200_DWH DCU_CUSTOMERS'[DCU_NAME],
+	[IsDM1Total] DESC,
+	'200_DWH DPO_PROJECTS'[DPO_NAME],
+	[IsDM3Total] DESC,
+	'200_DWH DPE_EMPLOYEES'[DPE_FULLNAME]

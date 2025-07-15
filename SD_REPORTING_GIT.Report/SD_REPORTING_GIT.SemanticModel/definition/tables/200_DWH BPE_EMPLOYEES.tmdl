@@ -1,0 +1,83 @@
+table '200_DWH BPE_EMPLOYEES'
+	lineageTag: 949195dc-c85f-405c-b9f4-a81103ffefab
+
+	measure DynamicText = ```
+			
+			"Selected Employee: " & COALESCE(SELECTEDVALUE('200_DWH DPE_EMPLOYEES'[DPE_FULLNAME]), "No selection made")
+			
+			```
+		lineageTag: 9413ac79-6731-4b46-a896-622db0de022a
+
+	measure PathContainsID = ```
+			
+			IF(
+			    CONTAINSSTRING(SELECTEDVALUE('200_DWH DPE_EMPLOYEES'[Path]), "11412185"),
+			    "TRUE",
+			    "FALSE"
+			)
+			
+			```
+		lineageTag: f7ce28ec-3e13-4e34-9e06-49a21aefe5f3
+
+	measure 'HRS.BUDGET.REMAINING' = sum('200_DWH DWP_WORK_PACKAGE'[DWP_BUDGET_HOURS])-[HRS.BILL]
+		lineageTag: c8682af3-7b26-44e1-a5a4-66ede6f0a1ae
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure MaxFinishedDateSelectedMonth2 = ```
+			
+			VAR Yesterday = TODAY()-1
+			VAR EOM_past = 
+			    EOMONTH(
+			        DATE(
+			            CALCULATE(
+			                SELECTEDVALUE('DATE2'[Year]),
+			                TREATAS(VALUES('DATE'[Year]), 'DATE2'[Year])
+			                ),
+			            CALCULATE(
+			                SELECTEDVALUE('DATE2'[Month Number]),
+			                TREATAS(VALUES('DATE'[Month Number]), 'DATE2'[Month Number])
+			            ),
+			            1), 
+			        0
+			    )
+			
+			RETURN
+			IF(Month(TODAY()) = SELECTEDVALUE('DATE'[Month Number]), Yesterday, EOM_past)
+			```
+		formatString: General Date
+		lineageTag: 5f89be2c-a715-4c01-a313-4c11c8e87dab
+
+	measure 'HRS.OVERBOOKED' = CALCULATE(SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]), '200_DWH FTS_TIMESHEETS'[FTS_OVERBOOKED] = TRUE)
+		lineageTag: 8dca43c4-dd7d-47d0-b791-f552f78d60b7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Last Refresh_Semantic Modell' = ```
+			
+			UTCNOW()
+			
+			```
+		formatString: General Date
+		lineageTag: 408eede2-995e-4810-ba31-4643a1083d3a
+
+	column BPE_EMPLOYEE_ID
+		dataType: string
+		lineageTag: 99739b6b-7ae5-4f50-a4de-18974ec9b8a9
+		summarizeBy: none
+		sourceColumn: BPE_EMPLOYEE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '200_DWH BPE_EMPLOYEES' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"200_DWH_BPE_EMPLOYEES" = Source{[Schema="200_DWH",Item="BPE_EMPLOYEES"]}[Data],
+				    #"Filtered Rows" = Table.SelectRows(#"200_DWH_BPE_EMPLOYEES", each ([BPE_EMPLOYEE_ID] <> null))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_ResultType = Table
+

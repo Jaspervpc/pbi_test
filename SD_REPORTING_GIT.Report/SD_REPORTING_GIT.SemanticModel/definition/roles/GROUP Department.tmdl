@@ -1,0 +1,16 @@
+role 'GROUP Department'
+	modelPermission: read
+
+	tablePermission '200_DWH DPE_EMPLOYEES' = ```
+			VAR CurrentUserDepartmentGroup =
+			    LOOKUPVALUE(
+			        '200_DWH DPE_EMPLOYEES'[Department Group],
+			        '200_DWH DPE_EMPLOYEES'[DPE_MAIL], USERPRINCIPALNAME()
+			    )
+			
+			RETURN 
+			    '200_DWH DPE_EMPLOYEES'[Department Group] = CurrentUserDepartmentGroup
+			```
+
+	annotation PBI_Id = 1615e471fb9f4113ab37342207ecff78
+

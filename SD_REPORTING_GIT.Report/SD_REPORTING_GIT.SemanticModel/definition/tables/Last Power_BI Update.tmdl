@@ -1,0 +1,34 @@
+table 'Last Power_BI Update'
+	lineageTag: ba7828ae-78ac-47bd-99fb-8a955bd95b86
+
+	column last_update
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b2031d55-49a0-4c6d-9dfa-b12146473145
+		summarizeBy: none
+		sourceColumn: last_update
+
+		annotation SummarizationSetBy = Automatic
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: ee232886-cfa3-4353-93e0-e07f0f4b1511
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Last Power_BI Update' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"Update_PowerBI" = Source{[Schema="public", Item="update_powerbi"]}[Data]
+				in
+				    Update_PowerBI
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

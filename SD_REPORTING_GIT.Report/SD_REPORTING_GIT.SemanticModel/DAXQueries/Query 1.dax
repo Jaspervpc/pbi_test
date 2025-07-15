@@ -1,0 +1,66 @@
+DEFINE
+	VAR __DS0FilterTable = 
+		TREATAS({2025}, 'DATE'[Year])
+
+	VAR __DS0FilterTable2 = 
+		TREATAS({"January"}, 'DATE'[Month Name])
+
+	VAR __DS0FilterTable3 = 
+		TREATAS({"ARS"}, '200_DWH DPO_PROJECTS'[DPO_COMPANY_ID])
+
+	VAR __DM3FilterTable = 
+		TREATAS({"028aec38b3bd995d5cc2a686ec643afa"}, '200_DWH FTS_TIMESHEETS'[FTS_SURROGATE_KEY])
+
+	VAR __ValueFilterDM3 = 
+		FILTER(
+			KEEPFILTERS(
+				SUMMARIZECOLUMNS(
+					'200_DWH FTS_TIMESHEETS'[FTS_SURROGATE_KEY],
+					'200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_ID],
+					__DS0FilterTable,
+					__DS0FilterTable2,
+					__DS0FilterTable3,
+					"HRS_BILL", 'Timesheet Measures'[HRS.BILL],
+					"HRS_BOOKED", IGNORE('Timesheet Measures'[HRS.BOOKED])
+				)
+			),
+			[HRS_BOOKED] > 0
+		)
+
+	VAR __DS0Core = 
+		SUMMARIZECOLUMNS(
+			ROLLUPADDISSUBTOTAL(
+				'200_DWH FTS_TIMESHEETS'[FTS_SURROGATE_KEY], "IsGrandTotalRowTotal",
+				'200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_ID],
+				"IsDM1Total",
+				NONVISUAL(__DM3FilterTable)
+			),
+			__DS0FilterTable,
+			__DS0FilterTable2,
+			__DS0FilterTable3,
+			__ValueFilterDM3,
+			"HRS_BILL", 'Timesheet Measures'[HRS.BILL]
+		)
+
+	VAR __DS0PrimaryWindowed = 
+		TOPN(
+			502,
+			__DS0Core,
+			[IsGrandTotalRowTotal],
+			0,
+			'200_DWH FTS_TIMESHEETS'[FTS_SURROGATE_KEY],
+			1,
+			[IsDM1Total],
+			0,
+			'200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_ID],
+			1
+		)
+
+EVALUATE
+	__DS0PrimaryWindowed
+
+ORDER BY
+	[IsGrandTotalRowTotal] DESC,
+	'200_DWH FTS_TIMESHEETS'[FTS_SURROGATE_KEY],
+	[IsDM1Total] DESC,
+	'200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_ID]

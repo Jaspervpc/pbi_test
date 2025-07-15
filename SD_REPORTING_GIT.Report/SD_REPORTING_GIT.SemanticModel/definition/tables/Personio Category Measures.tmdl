@@ -1,0 +1,393 @@
+table 'Personio Category Measures'
+	lineageTag: e26c0eb8-d97b-457c-8c3e-6b3a8b390969
+
+	measure 'HRS.PERCAT.CHILDCARE' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_child_care"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			
+			```
+		lineageTag: 8d0a9491-f2b5-4c8d-b769-02367a6cf107
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.FAMILYCARE' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_family_care"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 3069cfbc-cf80-420a-8b65-eb2568f0ef91
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.HOL' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_holiday"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			
+			```
+		lineageTag: 848cf2e5-2716-4707-bdba-15aef9306963
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.MAT.PAT.LEAVE' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_maternity_parental_leave"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: fbeda66a-0c4d-4542-b2e7-a3dc6ed07ba4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.OTHER' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_other"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 82661919-b2e1-4211-aebd-52a942998d7d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.PAIDVAC' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_paid_vacation"
+			    
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 299c677b-78b7-4c0e-bf11-679165975dc8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.SICK' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_sick_leave"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 6be0ff46-99e9-45bb-a499-73e92311defc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.UNPAIDVAC' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_unpaid_vacation"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 7c3841cc-bda3-4507-bdb8-5174cdaa2da5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.RED' = [HRS.PERCAT.HOL]+[HRS.PERCAT.MAT.PAT.LEAVE]+[HRS.PERCAT.PAIDVAC]+[HRS.PERCAT.UNPAIDVAC]+[HRS.SAPCAT.TRAINING]
+		lineageTag: 706d8f05-55d9-4895-bcb7-ac487db911b2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.SICK.MTD-1' = ```
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth]
+			VAR FirstDateOfSelectedMonth = 
+			CALCULATE(
+			    STARTOFMONTH('DATE'[Date]))
+			RETURN
+			CALCULATE(
+			    [HRS.PERCAT.SICK],
+			    FILTER(
+			        ALL('DATE'),
+			        'DATE'[Date] >= FirstDateOfSelectedMonth && 'DATE'[Date] < MaxDate
+			    )
+			)
+			
+			```
+		lineageTag: 5271542d-c53d-4034-889c-594c9e701653
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure testsick = ```
+			
+			CALCULATE(
+			    SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_sick_leave"
+			)
+			
+			```
+		lineageTag: 6bedb3b3-65bf-4427-b014-e74c97031cf3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure testpaidvac = ```
+			
+			CALCULATE(
+			    SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_paid_vacation"
+			)
+			
+			
+			```
+		lineageTag: 8594ad66-35a4-45ba-b71f-7823e3b7c0c1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.PERCAT.SICK.MTD' = ```
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth]
+			VAR FirstDateOfSelectedMonth = 
+			CALCULATE(
+			    STARTOFMONTH('DATE'[Date]))
+			RETURN
+			CALCULATE(
+			    [HRS.PERCAT.SICK],
+			    FILTER(
+			        ALL('DATE'),
+			        'DATE'[Date] >= FirstDateOfSelectedMonth && 'DATE'[Date] <= MaxDate
+			    )
+			)
+			
+			```
+		lineageTag: 026dd79c-39ea-4ffd-9424-bda4a13e4df5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Subcompany_Total = ```
+			
+			CALCULATE(
+			    SUM(KPIs_AGGREGATED[FTS_RECORDED_HOURS]), 
+			    
+			    -- Apply ISBLANK filter correctly
+			    FILTER(
+			        KPIs_AGGREGATED,
+			        ISBLANK(KPIs_AGGREGATED[FTS_BILLABLE])
+			    ),
+			    
+			    -- Apply Date filter
+			    TREATAS( 
+			        VALUES('Date'[Date]), 
+			        KPIs_AGGREGATED[FTS_TIMESHEET_DATE]
+			    ),
+			
+			    -- Apply Company filter
+			    TREATAS( 
+			        VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]),  
+			        KPIs_AGGREGATED[200_DWH DPE_EMPLOYEES.DPE_SUBCOMPANY_ID]  
+			    )
+			)
+			
+			```
+		lineageTag: 65f6e974-da82-4df9-bfaa-4a6d883b373e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure testfamilycare = ```
+			
+			CALCULATE(
+			    SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[FTS_WORK_PACKAGE_ID] = "absence_family_care"
+			)
+			
+			
+			```
+		lineageTag: 7108d175-80d8-4c00-ac80-6c35fd57de00
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Absence_Planned =
+			
+			[HRS.PERCAT.MAT.PAT.LEAVE]+ [HRS.PERCAT.PAIDVAC] + [HRS.PERCAT.UNPAIDVAC] + [HRS.PERCAT.OTHER] + [HRS.PERCAT.FAMILYCARE]
+		lineageTag: 2a716781-634b-4a41-86fe-3b25ca0f721a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Absence_Planned_% = ```
+			
+			DIVIDE([Absence_Planned], [HRS.WORKING.TARGET]) 
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: f92c2c01-3d8e-47ad-a1d1-6f4d3fb23ab9
+
+	measure Absence_Unplanned = [HRS.PERCAT.SICK] + [HRS.PERCAT.CHILDCARE]
+		lineageTag: e3498ae2-abaf-4a9b-be2b-6a919268d107
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Absence_Unplanned_% = DIVIDE([Absence_Unplanned], [HRS.WORKING.TARGET])
+		lineageTag: 37a06ba4-9c79-4185-9c99-d5149fed33f4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Absence Rate' =
+			
+			DIVIDE(([HRS.PERCAT.CHILDCARE] + [HRS.PERCAT.FAMILYCARE] + [HRS.PERCAT.OTHER] + [HRS.PERCAT.MAT.PAT.LEAVE] + [HRS.PERCAT.PAIDVAC] + [HRS.PERCAT.SICK] + [HRS.PERCAT.UNPAIDVAC]),  [HRS.WORKING.TARGET])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: a9a31930-dc33-482a-a5c4-5f07c27f032a
+
+	measure WorkingHours_Remaining = ```
+			
+			SUMX(
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES',
+			        [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE"
+			    ),
+			    (
+			        [HRS.WORKING.TARGET] -
+			        [HRS.PERCAT.SICK] - 
+			        [HRS.PERCAT.CHILDCARE] - 
+			        [HRS.PERCAT.FAMILYCARE] - 
+			        [HRS.PERCAT.MAT.PAT.LEAVE] - 
+			        [HRS.PERCAT.PAIDVAC] -
+			        [HRS.PERCAT.UNPAIDVAC] - 
+			        [HRS.PERCAT.OTHER]
+			    ) 
+			)
+			```
+		lineageTag: 46104e31-0928-4555-8cbc-e248b26150d4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure WorkingHours_Remaining_% =
+			
+			DIVIDE([WorkingHours_Remaining], [HRS.WORKING.TARGET])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 51dd3086-3335-4322-bf16-b5fb9eec86ac
+
+	measure Sick_Leave_Rate =
+			
+			DIVIDE([HRS.PERCAT.SICK], [HRS.WORKING.TARGET])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 974f7edb-9a3b-4c18-84d8-1454900a1c4c
+
+	measure Sick_Leave_Rate_PreviousYear =
+			
+			CALCULATE(
+			    [Sick_Leave_Rate],
+			    SAMEPERIODLASTYEAR('DATE'[Date])
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 381fb81e-d598-4fad-9566-15ca945aabdf
+
+	measure Sick_Leave_Rate_LTM = ```
+			
+			VAR MaxDate =
+			    CALCULATE(
+			        MAX('DATE'[Date]),
+			        REMOVEFILTERS('DATE'),
+			        FILTER(
+			            VALUES('DATE'[Date]),
+			            NOT(ISBLANK([HRS.PERCAT.SICK])) || NOT(ISBLANK([HRS.WORKING.TARGET]))
+			        )
+			    )
+			
+			VAR StartDate = MaxDate - 364
+			
+			RETURN
+			DIVIDE(
+			    CALCULATE(
+			        [HRS.PERCAT.SICK],
+			        FILTER(
+			            ALL('DATE'),
+			            'DATE'[Date] >= StartDate && 'DATE'[Date] <= MaxDate
+			        )
+			    ),
+			    CALCULATE(
+			        [HRS.WORKING.TARGET],
+			        FILTER(
+			            ALL('DATE'),
+			            'DATE'[Date] >= StartDate && 'DATE'[Date] <= MaxDate
+			        )
+			    ),
+			    0
+			)
+			
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: d23bbb48-38c9-45ef-b6e4-1ce61f447577
+
+	partition 'Personio Category Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

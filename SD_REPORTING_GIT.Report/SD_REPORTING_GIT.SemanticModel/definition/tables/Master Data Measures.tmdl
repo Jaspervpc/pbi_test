@@ -1,0 +1,209 @@
+table 'Master Data Measures'
+	lineageTag: 3711bc91-ad42-483f-8e8e-0abd7122a970
+
+	measure 'SUM.CONTRACTED.FTE' = ```
+			CALCULATE(
+			        SUMX(
+			            '200_DWH DPE_EMPLOYEES',
+			            '200_DWH DPE_EMPLOYEES'[DPE_FTE] * [ActiveDaysShare]
+			        ),
+			        FILTER(
+			            '200_DWH DPE_EMPLOYEES',
+			            [IsCurrentinDate] = "TRUE" && [FTE.CONTRACTED.HRS] > 0
+			        ),
+			        VALUES('DATE'[Month Number])
+			        
+			    )
+			```
+		lineageTag: 087c2f46-a765-4438-ad96-c610fb6381ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'FTE.CONTRACT.DAYS' =
+			
+			[FTE.CONTRACTED.HRS]/8
+		lineageTag: b6d0fcf2-ffa9-42f2-8bc7-14459b1d2f7b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'FTE.CONTRACTED.HRS' = ```
+			
+			CALCULATE(
+			        SUMX(
+			            FILTER(
+			                '200_DWH DPE_EMPLOYEES',
+			                [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" && '200_DWH DPE_EMPLOYEES'[DPE_BILLABLE] = TRUE() 
+			            ),
+			            '200_DWH DPE_EMPLOYEES'[DPE_DAILY_WORKING_HOURS] * [ActiveDaysShare]
+			        ) * 
+			        COUNTROWS(
+			            FILTER(
+			                'DATE',
+			                'DATE'[IsWorkingDay] = 1
+			            )),
+			        VALUES('DATE'[Month Number])
+			    )
+			```
+		lineageTag: 4b4e3dc1-af04-4e3d-af05-9475abc99f5d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'SUM.CONTRACTED.FTE.PROF' = ```
+			CALCULATE(
+			    SUMX(
+			        '200_DWH DPE_EMPLOYEES',
+			        '200_DWH DPE_EMPLOYEES'[DPE_FTE] * [ActiveDaysShare]
+			    ),
+			    FILTER(
+			        ('200_DWH DPE_EMPLOYEES'), 
+			        [IsCurrentinDate] = "TRUE" && '200_DWH DPE_EMPLOYEES'[DPE_PROFESSIONAL] = TRUE() && [FTE.CONTRACTED.HRS] > 0
+			    )
+			,
+			        VALUES('DATE'[Month Number])
+			        
+			    )
+			```
+		lineageTag: 09ab62ea-a942-4aa0-a1a8-a829910b8848
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'SUM.CONTRACTED.FTE %' = ```
+			
+			[SUM.CONTRACTED.FTE] 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 11de3f4d-dc7d-4430-9cfa-d703fdbecd92
+
+	measure 'SUM.PLANNED.FTE' = ```
+			CALCULATE(
+			    SUMX(
+			        '200_DWH DPE_EMPLOYEES',
+			        '200_DWH DPE_EMPLOYEES'[Test PlannedFTE_Adjusted] * [ActiveDaysShare]
+			    ),
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES', 
+			        [IsCurrentinDate] = "TRUE" && [FTE.CONTRACTED.HRS] > 0
+			    )
+			    ,
+			    VALUES('DATE'[Month Number])
+			)
+			
+			```
+		lineageTag: 2d10cce3-7a42-4952-bad9-55fbda9b3fc6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'FTE with NON_PROF' = ```
+			IF(
+			    COUNTROWS(FILTER('200_DWH DPE_EMPLOYEES', '200_DWH DPE_EMPLOYEES'[DPE_PROFESSIONAL] = TRUE())) > 0, 
+			    [SUM.CONTRACTED.FTE], 
+			    [SUM.CONTRACTED.FTE] * [SUM.PLANNED.FTE]
+			)
+			```
+		lineageTag: c6f5eab4-48c6-40cf-9fd1-049377858032
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ProfitCentre.Dummy'
+		lineageTag: dbf1ae9d-6129-4e38-b371-eef429936eca
+
+	measure 'SUM.PLANNED.FTE %' = [SUM.PLANNED.FTE]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 26ab7621-e063-4095-a596-c3ee166ee67f
+
+	measure 'Contracted X Planned FTE' = ```
+			
+			CALCULATE(
+			    SUMX(
+			        '200_DWH DPE_EMPLOYEES',
+			        '200_DWH DPE_EMPLOYEES'[DPE_FTE] 
+			        * '200_DWH DPE_EMPLOYEES'[Test PlannedFTE_Adjusted]
+			        * [ActiveDaysShare]
+			    ),
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES',
+			        [IsCurrentinDate] = "TRUE" &&
+			        [FTE.CONTRACTED.HRS] > 0
+			    ),
+			    VALUES('DATE'[Month Number])
+			)
+			
+			```
+		lineageTag: f02eb7f5-ace1-4e15-a777-f3b95238f0dd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Other.Dummy' = " "
+		lineageTag: c444e08c-5e23-42c7-b5c1-ea70942149fe
+
+	measure 'FTE.CALCULATIONBASED.HRS' = ```
+			
+			CALCULATE(
+			        SUMX(
+			            FILTER(
+			                '200_DWH DPE_EMPLOYEES',
+			                [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" && '200_DWH DPE_EMPLOYEES'[DPE_BILLABLE] = TRUE() 
+			            ),
+			            '200_DWH DPE_EMPLOYEES'[DPE_DAILY_WORKING_HOURS] * [ActiveDaysShare] 
+			
+			        ) * 
+			        COUNTROWS(
+			            FILTER(
+			                'DATE',
+			                'DATE'[IsWorkingDay] = 1
+			            )),
+			        VALUES('DATE'[Month Number])
+			    )* [CALC.BASED.FACTOR]
+			```
+		lineageTag: aa732075-f991-438f-868c-54adafc37ec8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.WORKING.PAID.CB' = ```
+			
+			// SUMX(
+			//     FILTER(
+			//         '200_DWH DPE_EMPLOYEES',
+			//         [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE"
+			//     ),
+			//     (
+			//         [FTE.CALCULATIONBASED.HRS] -
+			//         (([HRS.PERCAT.CHILDCARE] +
+			//         [HRS.PERCAT.FAMILYCARE] +
+			//         [HRS.PERCAT.HOL] +
+			//         [HRS.PERCAT.MAT.PAT.LEAVE] +
+			//         [HRS.PERCAT.OTHER] +
+			//         [HRS.PERCAT.PAIDVAC] +
+			//         [HRS.PERCAT.UNPAIDVAC]) *[CALC.BASED.FACTOR])
+			//     ) 
+			// )
+			[CALC.BASED.FACTOR] *[HRS.WORKING.PAID]
+			```
+		lineageTag: bdb56e65-966e-4064-aedb-c0ec4ae886a9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CALC.BASED.FACTOR' = DIVIDE([Contracted X Planned FTE], [SUM.CONTRACTED.FTE], 0)
+		formatString: 0.0000
+		lineageTag: c13acf6c-0bbc-4c6d-9002-a50cd298447d
+
+	measure LinkToFile = "https://timetoactgroup.sharepoint.com/sites/TGP-Auslastungsreporting/Shared%20Documents/General/GROUP%20-%20Delivery%20Reporting/export/" &  min('200_DWH DCO_COMPANIES'[DCO_LEGAL_ENTITY]) & "/" & min('200_DWH DCO_COMPANIES'[DCO_LEGAL_ENTITY]) & "-051-" & max('DATE'[Year]) & "-" & max('DATE'[Month Number]) & ".xlsx"
+		lineageTag: 2295de06-62ce-4449-9766-a094cb70cdcd
+
+	measure 'FTE.CONTRACTED.HRS.CB' = [FTE.CONTRACTED.HRS] * [CALC.BASED.FACTOR]
+		lineageTag: 5e8fee2b-361d-4f90-a968-213c2438723b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Master Data Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,26 @@
+table ZeigeModus
+	lineageTag: 951365e5-6051-4859-80de-8be0947b8bfa
+
+	column Modus
+		lineageTag: 38d9022d-3efd-4def-8d30-ec918426edd2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Modus]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ZeigeModus = calculated
+		mode: import
+		source = ```
+				DATATABLE(
+				    "Modus", STRING,
+				    {
+				        { "All Work Packages" },
+				        { "Only Work Packages with Bookings" }
+				    }
+				)
+				
+				```
+
+	annotation PBI_Id = 861e02b2df3b45d0a9cbaba44c6e8ea8
+

@@ -1,0 +1,151 @@
+table '200_DWH DPO_PROJECTS'
+	lineageTag: f009e227-e71a-4405-a8d5-8a2e04dea17d
+
+	measure PROJECTS_RANK =
+			RANKX(
+			    ALL('200_DWH DPO_PROJECTS'[DPO_NAME]),
+			    [HRS.BILL] + RAND()/1000,
+			    ,
+			    DESC,
+			    DENSE
+			)
+		formatString: 0
+		lineageTag: 3ca72f94-4f4d-4f13-a88b-a7b8e78f33af
+
+	measure Top10Projects = IF([PROJECTS_RANK] <= 10, 1, 0)
+		formatString: 0
+		lineageTag: ff336ab9-2d75-425e-96f4-e18486d99012
+
+	column DPO_COMPANY_ID
+		dataType: string
+		lineageTag: 02f2511c-ec0b-4090-b060-5a56df00b0a8
+		summarizeBy: none
+		sourceColumn: DPO_COMPANY_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_ID
+		dataType: string
+		lineageTag: 1910d007-4ad9-420e-8bb1-5a351dde616f
+		summarizeBy: none
+		sourceColumn: DPO_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_PROJECT_BILLING
+		dataType: string
+		lineageTag: 21307fd4-f158-4ba6-8e32-2d74fbb5aad8
+		summarizeBy: none
+		sourceColumn: DPO_PROJECT_BILLING
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_CUSTOMER_ID
+		dataType: string
+		lineageTag: bc0106a9-e6ca-4033-bf6a-944c641aa835
+		summarizeBy: none
+		sourceColumn: DPO_CUSTOMER_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_COST_CENTER
+		dataType: string
+		lineageTag: f061a82b-26fc-48a8-acea-58ba56eaf1dc
+		summarizeBy: none
+		sourceColumn: DPO_COST_CENTER
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_NAME
+		dataType: string
+		lineageTag: 6d351a56-3441-4144-a17c-4d18d75f1a06
+		summarizeBy: none
+		sourceColumn: DPO_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_START_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d5b15c7b-fef5-453c-9314-6b024c62f185
+		summarizeBy: none
+		sourceColumn: DPO_START_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_STATUS
+		dataType: string
+		lineageTag: 8f7cec3e-1e2f-4a35-bb98-631f2189b0fe
+		summarizeBy: none
+		sourceColumn: DPO_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_END_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f2832e8b-793f-47f0-9c78-772bd852143d
+		summarizeBy: none
+		sourceColumn: DPO_END_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_CATEGORY
+		dataType: string
+		lineageTag: a6e640bb-1973-4457-be84-f641df769a53
+		summarizeBy: none
+		sourceColumn: DPO_CATEGORY
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_PROFIT_CENTER
+		dataType: string
+		lineageTag: 30ecc0a4-9a14-4d8f-97ca-23ab050ae11f
+		summarizeBy: none
+		sourceColumn: DPO_PROFIT_CENTER
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_PROJECT_MANAGER_ID
+		dataType: string
+		lineageTag: f408ab57-61e6-4906-9241-bd277f69e78b
+		summarizeBy: none
+		sourceColumn: DPO_PROJECT_MANAGER_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_MANAGER_FULLNAME
+		dataType: string
+		lineageTag: f0079ca0-de22-4237-90d9-193eef9d95cf
+		summarizeBy: none
+		sourceColumn: DPO_MANAGER_FULLNAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_CUSTOMER_NAME
+		dataType: string
+		lineageTag: 207b92e0-27b4-4834-907a-62abd6b5cbfc
+		summarizeBy: none
+		sourceColumn: DPO_CUSTOMER_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPO_SAP_ID
+		dataType: string
+		lineageTag: 75630b5a-82ef-4136-bc8b-c7f2ce4e14bf
+		summarizeBy: none
+		sourceColumn: DPO_SAP_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '200_DWH DPO_PROJECTS' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"200_DWH_DPO_PROJECTS" = Source{[Schema="200_DWH",Item="DPO_PROJECTS"]}[Data]
+				in
+				    #"200_DWH_DPO_PROJECTS"
+
+	annotation PBI_ResultType = Table
+

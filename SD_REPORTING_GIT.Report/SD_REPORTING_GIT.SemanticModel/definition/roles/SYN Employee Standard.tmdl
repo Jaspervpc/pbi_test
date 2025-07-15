@@ -1,0 +1,46 @@
+role 'SYN Employee Standard'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' = ```
+			// [FTS_COMPANY] = "ARS"
+			// ||
+			// RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "ARS"
+			VAR CurrentUserEmail = USERPRINCIPALNAME()
+			
+			-- Retrieve the Current User's Employee ID
+			VAR CurrentUserID = 
+			    CALCULATE(
+			        MAX('200_DWH DPE_EMPLOYEES'[DPE_EMPLOYEE_ID]),
+			        '200_DWH DPE_EMPLOYEES'[DPE_MAIL] = CurrentUserEmail
+			    )
+			
+			-- Check if the user is a supervisor (Team Lead)
+			VAR IsSupervisor = 
+			    LOOKUPVALUE(
+			        '200_DWH DPE_EMPLOYEES'[IsSupervisor], 
+			        '200_DWH DPE_EMPLOYEES'[DPE_MAIL], 
+			        CurrentUserEmail
+			    ) = TRUE()
+			
+			-- Check if the user is a Project Manager
+			VAR IsProjectManager = 
+			     LOOKUPVALUE(
+			        '200_DWH DPE_EMPLOYEES'[IsProjectManager], 
+			        '200_DWH DPE_EMPLOYEES'[DPE_MAIL], 
+			        CurrentUserEmail
+			    ) = TRUE()
+			
+			-- Apply logic
+			RETURN 
+			    IF(
+			        IsSupervisor || IsProjectManager, 
+			        -- Allow access to ARS and EXTERNS data for supervisors or project managers
+			        (
+			          [FTS_COMPANY] = "SYN"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "SYN"
+			        ), 
+			        -- Otherwise, restrict to their own data
+			        RELATED('200_DWH DPE_EMPLOYEES'[DPE_EMPLOYEE_ID]) = CurrentUserID)
+			```
+
+	annotation PBI_Id = 7b9d47c982b5476abece373e172896ec
+

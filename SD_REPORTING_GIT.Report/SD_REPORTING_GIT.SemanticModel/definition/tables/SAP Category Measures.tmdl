@@ -1,0 +1,129 @@
+table 'SAP Category Measures'
+	lineageTag: 9c8aafb5-1296-4233-89ea-f9b21e12a1b7
+
+	measure 'HRS.SAPCAT.INTERNAL' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[DWP_CATEGORY] = "2"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: fe9512af-2a88-4768-9ee0-63b18bbd318c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.SAPCAT.EDUCATION' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[DWP_CATEGORY] = "3"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 48b2dd33-6df7-4642-8a65-ebcb72d7e12e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.SAPCAT.INTDEV' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[DWP_CATEGORY] = "1"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: cd3e06e9-ef20-48ab-b565-01e5b1effdb0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.SAPCAT.MISCELLANEOUS' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[DWP_CATEGORY] = "6"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 4a288b63-93f3-4450-b9ed-1053336e19bc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.SAPCAT.SALES.SUPPORT' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[DWP_CATEGORY] = "4"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 925dd9e8-e870-496a-8bb6-1a942588bd0a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.SAPCAT.TRAINING' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    '200_DWH FTS_TIMESHEETS'[DWP_CATEGORY] = "5"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			```
+		lineageTag: 33dbf021-c622-40ee-b95d-6ca49d6b2867
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'SAP Category Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,32 @@
+table '200_DWH DCU_CUSTOMERS'
+	lineageTag: c2bb9958-d4e9-42fa-b86c-ae067a92ad94
+
+	column DCU_ID
+		dataType: string
+		lineageTag: 5f8b4cfa-1ecd-41f7-97eb-668f8b75f8fb
+		summarizeBy: none
+		sourceColumn: DCU_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DCU_NAME
+		dataType: string
+		lineageTag: 596592ec-94ed-4ad9-af26-2710cd4e6cc3
+		summarizeBy: none
+		sourceColumn: DCU_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '200_DWH DCU_CUSTOMERS' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"200_DWH_DCU_CUSTOMERS" = Source{[Schema="200_DWH",Item="DCU_CUSTOMERS"]}[Data]
+				in
+				    #"200_DWH_DCU_CUSTOMERS"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

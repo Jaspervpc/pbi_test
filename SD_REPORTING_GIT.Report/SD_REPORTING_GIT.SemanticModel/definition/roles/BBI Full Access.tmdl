@@ -1,0 +1,9 @@
+role 'BBI Full Access'
+	modelPermission: read
+
+	tablePermission '200_DWH FTS_TIMESHEETS' = [FTS_COMPANY] = "BBI"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "BBI"
+
+	tablePermission '200_DWH FWL_WORKLOGS' = [FWL_COMPANY] = "BBI"|| RELATED('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]) = "BBI"
+
+	annotation PBI_Id = 6b769b80af5e4d90a579ea2a2efa75b3
+

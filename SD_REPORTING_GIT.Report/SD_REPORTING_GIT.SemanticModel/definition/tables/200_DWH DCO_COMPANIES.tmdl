@@ -1,0 +1,55 @@
+table '200_DWH DCO_COMPANIES'
+	lineageTag: 7bea4643-9264-49ab-8ee3-4c396370efe5
+
+	column DCO_SAP_ID
+		dataType: string
+		lineageTag: 9be1adb7-4cc1-411e-a694-080390fec735
+		summarizeBy: none
+		sourceColumn: DCO_SAP_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DCO_LEGAL_ENTITY
+		dataType: string
+		lineageTag: e52aa9bf-1677-4752-9881-a3726537284c
+		summarizeBy: none
+		sourceColumn: DCO_LEGAL_ENTITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column DCO_BRAND
+		dataType: string
+		lineageTag: de1e59cc-737d-499b-8bcc-ae7493bf1a4e
+		summarizeBy: none
+		sourceColumn: DCO_BRAND
+
+		annotation SummarizationSetBy = Automatic
+
+	column DCO_LEGAL_ENTITY_SUB
+		dataType: string
+		lineageTag: e16a24b9-712d-4d0c-a90a-35836dad67fa
+		summarizeBy: none
+		sourceColumn: DCO_LEGAL_ENTITY_SUB
+
+		annotation SummarizationSetBy = Automatic
+
+	column DCO_SAP_MIGRATED
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9794113d-427f-4a39-bd6e-2d4e423b3468
+		summarizeBy: none
+		sourceColumn: DCO_SAP_MIGRATED
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '200_DWH DCO_COMPANIES' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"200_DWH_DCO_COMPANIES" = Source{[Schema="200_DWH",Item="DCO_COMPANIES"]}[Data]
+				in
+				    #"200_DWH_DCO_COMPANIES"
+
+	annotation PBI_ResultType = Table
+

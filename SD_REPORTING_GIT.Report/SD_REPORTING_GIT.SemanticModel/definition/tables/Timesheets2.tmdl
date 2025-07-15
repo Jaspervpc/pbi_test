@@ -1,0 +1,919 @@
+table Timesheets2
+	lineageTag: 797026b4-98be-4875-9398-bb4784ad20d6
+
+	measure 'CO_HRS.BILL2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        ISBLANK('Timesheets2'[FTS_BILLABLE]),
+			        TREATAS( VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			VAR POOL_BILLED_EFFORT =
+			    CALCULATE(
+			        SUMX(
+			            'Timesheets2',
+			            'Timesheets2'[FTS_RECORDED_HOURS] * RELATED('Work_Packages2'[DWP_BONUS_RATE])
+			        ),
+			        TREATAS(VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			
+			RETURN
+			TotalHours + POOL_BILLED_EFFORT
+			```
+		lineageTag: d7cac1f5-1572-421f-bfb4-5223245ba609
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.PERCAT.CHILDCARE2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_child_care",
+			        TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )   
+			RETURN
+			TotalHours
+			```
+		lineageTag: 2d5dbf10-b18f-457d-a31f-835923b6105b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.PERCAT.FAMILYCARE2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_family_care",
+			        TREATAS( VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			RETURN
+			TotalHours
+			```
+		lineageTag: 9e2940d7-6199-4dbb-a2dc-1167f51021c6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.PERCAT.HOL2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_holiday",
+			        TREATAS( VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: a67b9923-869b-45b9-9b7d-4e425094a4a5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.PERCAT.MAT.PAT.LEAVE2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_maternity_parental_leave",
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			RETURN
+			TotalHours
+			```
+		lineageTag: d3e32661-1c58-410d-80df-7e5d4d5284d4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.PERCAT.OTHER2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_other"
+			   ,
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: 065fa390-3f46-4e30-91f4-4d75126267aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.PERCAT.PAIDVAC2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_paid_vacation"
+			,
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: 02412b8f-0abf-4fc2-893b-fe59e5982eab
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO.HRS.PERCAT.SICK2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_sick_leave"
+			    ,
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: 17b0c772-4844-4bab-a2ea-d48d835d6e1e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO_RATIO.BILLABLE/AVAILABLE.2%' = ```
+			
+			IF(
+			    [CO.HRS.WORKING.AVAILABLE2] = 0, 
+			    0, 
+			    [CO_HRS.BILL2] / [CO.HRS.WORKING.AVAILABLE2]
+			)
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 6b898f6b-adba-4916-8e7f-a54d358c144a
+
+	measure 'CO.HRS.PERCAT.UNPAIDVAC2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_unpaid_vacation"
+			 ,
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			RETURN
+			TotalHours
+			```
+		lineageTag: 1f05c0ce-a096-4292-bc49-188ae8203d09
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO_RATIO.BILLABLE/PAID2.%' =
+			
+			[CO_HRS.BILL2] / [CO.HRS.WORKING.PAID2]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 8d79102f-6f38-4e2f-aa1e-ed9f230a7ffc
+
+	measure 'DE_HRS.BILL2' = ```
+			
+			VAR TotalBillHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        ISBLANK('Timesheets2'[FTS_BILLABLE]),
+			        TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			VAR POOL_BILLED_EFFORT =
+			    CALCULATE(
+			        SUMX(
+			            'Timesheets2',
+			            'Timesheets2'[FTS_RECORDED_HOURS] * RELATED('Work_Packages2'[DWP_BONUS_RATE])
+			        ),
+			        TREATAS(VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group]),
+			        TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			RETURN
+			TotalBillHours + POOL_BILLED_EFFORT
+			
+			```
+		lineageTag: 46f2fc0c-509a-47a5-af9c-5ecb9d069f2c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.PERCAT.CHILDCARE2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_child_care",
+			        TREATAS( VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: e6a3376b-4bfe-4eaf-a810-ca1ded809cc1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.PERCAT.FAMILYCARE2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_family_care",
+			        TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: e5165d81-3f91-4583-84e7-96a231a65111
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.PERCAT.HOL2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_holiday",
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: d1ea7157-1ec8-4f9d-a790-2c9aa352b3ac
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.PERCAT.MAT.PAT.LEAVE2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_maternity_parental_leave",
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: 79d6d156-69de-4ba4-ab1e-eb4eebcafa90
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.PERCAT.OTHER2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_other"
+			   ,
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: afd90ecd-9662-4d40-8977-8107aa12b94d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.PERCAT.PAIDVAC2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_paid_vacation"
+			,
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: 676273fc-6d4d-4fa5-a444-157f81346b8f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.PERCAT.SICK2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_sick_leave"
+			    ,
+			       TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE] )
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: 6392e0e1-f0bf-449a-895f-1317e143cdc2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE.HRS.PERCAT.UNPAIDVAC2' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			        'Timesheets2'[FTS_WORK_PACKAGE_ID] = "absence_unpaid_vacation",
+			        TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: 7c4ab88b-cc49-4047-9707-73b95a3d8306
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE_RATIO.BILLABLE/AVAILABLE.2%' = ```
+			
+			IF(
+			    [DE.HRS.WORKING.AVAILABLE2] = 0, 
+			    0, 
+			    [DE_HRS.BILL2] / [DE.HRS.WORKING.AVAILABLE2]
+			)
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 0a041262-6361-4348-aa8a-29c62e9c2abd
+
+	measure 'DE_RATIO.BILLABLE/PAID.2%' = ```
+			
+			IF(
+			    [DE.HRS.WORKING.PAID2] = 0, 
+			    0, 
+			    [DE_HRS.BILL2] / [DE.HRS.WORKING.PAID2]
+			)
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: dfc52b9a-15b0-4797-9e87-fd2acec4e995
+
+	measure 'CO_HRS.WORKING.PAID.MTD-1' = ```
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth2]
+			VAR FirstDateOfSelectedMonth = 
+			CALCULATE(
+			    STARTOFMONTH('DATE'[Date]))
+			RETURN
+			CALCULATE(
+			    [CO.HRS.WORKING.PAID2],
+			    FILTER(
+			        ALL('DATE'),
+			        'DATE'[Date] >= FirstDateOfSelectedMonth && 'DATE'[Date] <= MaxDate
+			    ),
+			    TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			    TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			    TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			)
+			```
+		lineageTag: e96ec8da-91d6-45ff-8f14-77498573323f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO_HRS.BILL.MTD-1' = ```
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth2]
+			VAR IsCurrent = [IsCurrentinDate2]
+			VAR IsInRange = [IsEmployeedDateInRange2]
+			VAR TotalHours =
+			    IF(
+			        IsCurrent = "TRUE" && IsInRange = "TRUE",
+			        CALCULATE(
+			            SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			            'Timesheets2'[FTS_BILLABLE] = BLANK(),
+			            'Timesheets2'[FTS_TIMESHEET_DATE] <= MaxDate,
+			
+			            TREATAS( VALUES('Date'[Date]), 'Date2'[Date]),
+			            TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			            TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			        )
+			    )
+			
+			VAR POOL_BILLED_EFFORT =
+			    CALCULATE(
+			        SUMX( 
+			            FILTER(
+			                'Timesheets2',
+			                'Timesheets2'[FTS_TIMESHEET_DATE] <= MaxDate
+			            ),
+			            'Timesheets2'[FTS_RECORDED_HOURS] * RELATED('Work_Packages2'[DWP_BONUS_RATE])
+			        ),
+			        TREATAS(VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			
+			
+			RETURN
+			TotalHours + POOL_BILLED_EFFORT
+			```
+		lineageTag: 9c9534a7-7fdb-445c-a4ea-56a68ceea250
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO_PAID.HRS.MONTH2' = CALCULATE([CO.HRS.WORKING.PAID2], REMOVEFILTERS('DATE2'[DATE]))
+		lineageTag: 028265f6-ad46-43d2-9329-668fe8bfab7c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO_RATIO.EXP.BILLABLE/CONTRACTED2' = [CO_HRS.EXP.BILL2] / [CO.FTE.CONTRACTED.HRS2]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: d6028097-b543-412c-aac5-5e94291dfb9f
+
+	measure 'CO_HRS.EXP.BILL2' = [CO_HRS.BILL.MTD-1] / [CO_HRS.WORKING.PAID.MTD-1] * [CO_PAID.HRS.MONTH2]
+		lineageTag: 55d9c610-8f16-4f11-86c0-2914f9346684
+
+	measure 'CO_RATIO.EXP.BILLABLE/PAID2' = [CO_HRS.EXP.BILL2]/[CO.HRS.WORKING.PAID2]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 9a9152c0-303e-4c26-8aef-243741c938a5
+
+	measure 'CO_RATIO.EXP.BILLABLE/AVAILABLE2' = [CO_HRS.EXP.BILL2]/[CO.HRS.WORKING.AVAILABLE2]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 9d55ee1d-2b55-41c1-abeb-ee5f7c330c2b
+
+	measure 'DE_HRS.EXP.BILL2' = [DE_HRS.BILL.MTD-1] / [DE_HRS.WORKING.PAID.MTD-1] * [DE_PAID.HRS.MONTH2]
+		lineageTag: 3afe9272-4a44-406a-9c79-3138255e537f
+
+	measure 'DE_HRS.WORKING.PAID.MTD-1' = ```
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth2]
+			VAR FirstDateOfSelectedMonth = 
+			CALCULATE(
+			    STARTOFMONTH('DATE'[Date]))
+			RETURN
+			CALCULATE(
+			    [CO.HRS.WORKING.PAID2],
+			    FILTER(
+			        ALL('DATE'),
+			        'DATE'[Date] >= FirstDateOfSelectedMonth && 'DATE'[Date] <= MaxDate
+			    ),
+			    TREATAS( VALUES('Date'[Date]), 'Date2'[Date] ),
+			    TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			    TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group]),
+			    TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			)
+			```
+		lineageTag: ee1bf82a-9ccd-47fa-8f35-7c69be780833
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE_HRS.BILL.MTD-1' = ```
+			
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth2]
+			VAR IsCurrent = [IsCurrentinDate2]
+			VAR IsInRange = [IsEmployeedDateInRange2]
+			VAR TotalHours =
+			    IF(
+			        IsCurrent = "TRUE" && IsInRange = "TRUE",
+			        CALCULATE(
+			            SUM('Timesheets2'[FTS_RECORDED_HOURS]),
+			            'Timesheets2'[FTS_BILLABLE] = BLANK(),
+			            'Timesheets2'[FTS_TIMESHEET_DATE] <= MaxDate,
+			
+			            TREATAS( VALUES('Date'[Date]), 'Date2'[Date]),
+			            TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			            TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group]),
+			            TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			        )
+			    )
+			
+			VAR POOL_BILLED_EFFORT =
+			    CALCULATE(
+			        SUMX( 
+			            FILTER(
+			                'Timesheets2',
+			                'Timesheets2'[FTS_TIMESHEET_DATE] <= MaxDate
+			            ),
+			            'Timesheets2'[FTS_RECORDED_HOURS] * RELATED('Work_Packages2'[DWP_BONUS_RATE])
+			        ),
+			        TREATAS(VALUES('Date'[Date]), 'Date2'[Date]),
+			        TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_SUBCOMPANY_ID]), 'EMPLOYEE2'[DPE_SUBCOMPANY_ID]),
+			        TREATAS( VALUES('200_DWH DPE_EMPLOYEES'[Department Group]), 'EMPLOYEE2'[Department Group]),
+			        TREATAS(VALUES('200_DWH DPE_EMPLOYEES'[DPE_BILLABLE]), 'EMPLOYEE2'[DPE_BILLABLE])
+			    )
+			
+			RETURN
+			TotalHours + POOL_BILLED_EFFORT
+			```
+		lineageTag: 337ed5a9-95e3-4989-a4b0-df5cfe070c88
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE_PAID.HRS.MONTH2' = CALCULATE([DE.HRS.WORKING.PAID2], REMOVEFILTERS('DATE2'[DATE]))
+		lineageTag: a9c37a90-1480-4f30-b00a-23b87a0845ef
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE_RATIO.EXP.BILLABLE/PAID2' = [DE_HRS.EXP.BILL2]/[DE.HRS.WORKING.PAID2]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: e1540b41-be44-4724-b82b-caf4a780c072
+
+	measure 'DE_RATIO.EXP.BILLABLE/AVAILABLE2' = [DE_HRS.EXP.BILL2]/[DE.HRS.WORKING.AVAILABLE2]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 41b516bd-1999-4d38-b9d7-d22705bd6aa5
+
+	measure 'UNFILTERED_HRS.BILL' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM(Timesheets2[FTS_RECORDED_HOURS]),
+			        ISBLANK(Timesheets2[FTS_BILLABLE]),
+			        TREATAS( VALUES('200_DWH DWP_WORK_PACKAGE'[DWP_ID]), 'Work_Packages2'[DWP_ID])
+			    )
+			    
+			RETURN
+			TotalHours
+			```
+		lineageTag: 77118569-4236-4053-8eed-c8d8d35b9107
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure DYNAMIC_BUDGET_REMAINING = ```
+			
+			// ZeigeBudgetFlex =
+			VAR Auswahl = SELECTEDVALUE ( ZeigeModus[Modus], "Only Booked Work Packages" )
+			
+			VAR TotalHours = [UNFILTERED_HRS.BUDGET.REMAINING]
+			    // CALCULATE(
+			    //     SUM(Timesheets2[FTS_RECORDED_HOURS]),
+			    //     ISBLANK(Timesheets2[FTS_BILLABLE]),
+			    //     TREATAS( VALUES('200_DWH DWP_WORK_PACKAGE'[DWP_ID]), 'Work_Packages2'[DWP_ID])
+			    // )
+			    
+			
+			VAR Ergebnis_OnlyBooked =
+			IF (
+			    COUNTROWS ( RELATEDTABLE ( '200_DWH FTS_TIMESHEETS' ) ) > 0,
+			    [UNFILTERED_HRS.BUDGET.REMAINING],
+			    BLANK()
+			)
+			
+			
+			RETURN
+			SWITCH (
+			    TRUE(),
+			    Auswahl = "All Work Packages", TotalHours,
+			    Auswahl = "Only Work Packages with Bookings", Ergebnis_OnlyBooked
+			)
+			
+			```
+		lineageTag: 6e50db17-2d99-403d-8d04-557ec8cd27d9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure DYNAMIC_BUDGET_INITIAL = ```
+			
+			// ZeigeBudgetFlex =
+			VAR Auswahl = SELECTEDVALUE ( ZeigeModus[Modus], "Only Booked Work Packages" )
+			
+			VAR TotalHours = SUM('200_DWH DWP_WORK_PACKAGE'[DWP_BUDGET_HOURS])
+			    // CALCULATE(
+			    //     SUM(Timesheets2[FTS_RECORDED_HOURS]),
+			    //     ISBLANK(Timesheets2[FTS_BILLABLE]),
+			    //     TREATAS( VALUES('200_DWH DWP_WORK_PACKAGE'[DWP_ID]), 'Work_Packages2'[DWP_ID])
+			    // )
+			    
+			
+			VAR Ergebnis_OnlyBooked =
+			IF (
+			    COUNTROWS ( RELATEDTABLE ( '200_DWH FTS_TIMESHEETS' ) ) > 0,
+			    SUM('200_DWH DWP_WORK_PACKAGE'[DWP_BUDGET_HOURS]),
+			    BLANK()
+			)
+			
+			
+			RETURN
+			SWITCH (
+			    TRUE(),
+			    Auswahl = "All Work Packages", TotalHours,
+			    Auswahl = "Only Work Packages with Bookings", Ergebnis_OnlyBooked
+			)
+			
+			```
+		lineageTag: e8611712-6a6d-45fc-9547-722dd4f82b9a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CO_RATIO.BILLABLE/PAID.CB' =
+			
+			[CO_HRS.BILL2] / [CO.HRS.WORKING.PAID.CB]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 7b8abcc2-2841-4cce-822d-6108af9a73b4
+
+	measure 'DE_RATIO.BILLABLE/PAID.CB' = ```
+			
+			IF(
+			    [DE.HRS.WORKING.PAID.CB] = 0, 
+			    0, 
+			    [DE_HRS.BILL2] / [DE.HRS.WORKING.PAID.CB]
+			)
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 79f4cba1-a1f4-4411-929e-0811ce7d98e9
+
+	measure 'DE_RATIO.BILLABLE/AVAILABLE.CB' = [DE_HRS.BILL2] / [DE.HRS.WORKING.AVAILABLE.CB]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: c6bf1a95-840e-426c-9079-b758a73d4c2b
+
+	measure 'CO_RATIO.BILLABLE/AVAILABLE.CB' = [CO_HRS.BILL2] / [CO.HRS.WORKING.AVAILABLE.CB]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 0923c16f-7737-44d3-a1d1-2ad0dc6ff3fa
+
+	measure 'DE_RATIO.EXP.BILLABLE/AVAILABLE.CB' = [DE_HRS.EXP.BILL2]/[DE.HRS.WORKING.AVAILABLE.CB]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: e8337be9-3ba6-4a56-ac8b-9a42f8091199
+
+	measure 'CO_RATIO.EXP.BILLABLE/AVAILABLE.CB' = [CO_HRS.EXP.BILL2]/[CO.HRS.WORKING.AVAILABLE.CB]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: a95ab2f0-0044-4f1e-9db3-055bea368684
+
+	measure 'CO_RATIO.EXP.BILLABLE/PAID.CB' = [CO_HRS.EXP.BILL2]/[CO.HRS.WORKING.PAID.CB]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: fd9e9a0b-7b74-45a3-a6f8-1da396c2ca32
+
+	measure 'DE_RATIO.EXP.BILLABLE/PAID.CB' = [DE_HRS.EXP.BILL2]/[DE.HRS.WORKING.PAID.CB]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 1eab5cb7-bbc1-42fd-9e13-8be8c06a8a34
+
+	measure 'CO_CALC.BASED.FACTOR' = ```
+			
+			DIVIDE(
+			    [CO_Contracted X Planned FTE], 
+			    [CO_SUM.CONTRACTED.FTE], 
+			    0)
+			```
+		lineageTag: 4031bbd4-814b-400a-b90f-cfe687836574
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DE_CALC.BASED.FACTOR' = ```
+			
+			DIVIDE(
+			    [DE_Contracted X Planned FTE], 
+			    [DE_SUM.CONTRACTED.FTE], 
+			    0)
+			```
+		formatString: 0.0000
+		lineageTag: 9dcc3f74-b272-47d3-856b-0242a68f7f94
+
+	column FTS_ABSENCE_STATUS
+		lineageTag: 1a442b29-920f-4bc2-a059-ef22d5c34394
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_ABSENCE_STATUS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_PERSONIO_ID
+		lineageTag: 7b92e44a-df23-42b2-8009-4ccfa690590a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_PERSONIO_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_ABSENCE_FRACTION
+		lineageTag: 0c1176d3-2e3f-424e-aab3-7b0866b60c14
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_ABSENCE_FRACTION]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_BILLABLE
+		lineageTag: aee78d47-fdcd-4ec5-aa66-2441345028e5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_BILLABLE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_DESCRIPTION
+		lineageTag: d3e4b8d7-5409-4869-bab3-42923998e17e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_DESCRIPTION]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_WORK_PACKAGE_ID
+		lineageTag: 44a37c8f-d05e-486e-b495-97eeebd3a144
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_WORK_PACKAGE_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_RECORDED_HOURS
+		lineageTag: 1cd5d90f-fbe4-4e1b-9d2f-6c8b7cbdcbf1
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_RECORDED_HOURS]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FTS_TIMESHEET_DATE
+		formatString: General Date
+		lineageTag: 9b230c75-b9fb-48a8-8259-167902f56278
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_TIMESHEET_DATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_ACTIVITY_TYPE
+		lineageTag: f915edd0-1fdf-4ccc-8cff-dd225339158d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_ACTIVITY_TYPE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_CREATED_DATE
+		formatString: General Date
+		lineageTag: 97f91db3-b56e-43d0-a5ca-f57bebc1ca4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_CREATED_DATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_TIMESHEET_ID
+		lineageTag: 3700aa2d-363a-4b78-be42-3d3b5f735da3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_TIMESHEET_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_COMPANY_ID
+		lineageTag: 187e6bf1-d846-44c9-b78a-b361ea41a3b8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_COMPANY_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_CATEGORY
+		lineageTag: 39233066-4f98-460b-ad83-9238cc247bbb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[DWP_CATEGORY]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_UPLOAD_TIME
+		formatString: General Date
+		lineageTag: 504e39f0-5e4f-4cb9-9495-659f099a44ec
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_UPLOAD_TIME]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_SURROGATE_KEY
+		lineageTag: 15934188-01c6-4536-8d5e-3062cb7ddbd9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_SURROGATE_KEY]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_COMPANY
+		lineageTag: 7f01a405-eb48-471d-9f98-2beb7b5cdc39
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_COMPANY]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable_hours
+		lineageTag: 23a65b29-761a-42f7-af73-06e137b5013c
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[Billable_hours]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Non_billable Hours'
+		formatString: 0
+		lineageTag: f60e31db-4765-46c7-a610-8f9843475122
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[Non_billable Hours]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_REVIEW_REQUIRED
+		lineageTag: 927c9713-d1ad-4aa7-a021-d39ccdd4926e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_REVIEW_REQUIRED]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_OVERBOOKED
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4c1b2991-b53d-4168-b841-c19a11db4c8a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_OVERBOOKED]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_UPDATED_AT
+		formatString: General Date
+		lineageTag: ff383b90-d9c0-4a20-9711-632ca0a69ec4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_UPDATED_AT]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_BILLED_STATUS
+		lineageTag: e0db95be-bcd3-477d-b612-f69f8dcca47e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_BILLED_STATUS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_BILLED_DATE
+		formatString: General Date
+		lineageTag: c726861f-3ef4-4f94-9492-cf21ceeffdee
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_BILLED_DATE]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_INVOICED_HOURS
+		lineageTag: 18d8f30a-e954-4d13-b182-c2a98bb647e4
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: 200_DWH FTS_TIMESHEETS[FTS_INVOICED_HOURS]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Timesheets2 = calculated
+		mode: import
+		source = '200_DWH FTS_TIMESHEETS'
+
+	annotation PBI_Id = 4358dc2575784b5ba149223380badc92
+

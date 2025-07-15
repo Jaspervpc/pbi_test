@@ -1,0 +1,84 @@
+table '200_DWH DWP_WORK_PACKAGE'
+	lineageTag: 8298b060-4c93-4136-b406-e009f41a49b7
+
+	column DWP_ID
+		dataType: string
+		lineageTag: 58ceecbf-6d58-4085-9de2-d276c0c241e1
+		summarizeBy: none
+		sourceColumn: DWP_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_PROJECT_ID
+		dataType: string
+		lineageTag: 260fc89f-07b7-4135-bf27-e3b29c143a73
+		summarizeBy: none
+		sourceColumn: DWP_PROJECT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_CATEGORY
+		dataType: string
+		lineageTag: 4548a795-60a6-4fed-a035-d7e4ff23d325
+		summarizeBy: none
+		sourceColumn: DWP_CATEGORY
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_NAME
+		dataType: string
+		lineageTag: 6820ebb4-a425-4211-9a52-53d286272aa7
+		summarizeBy: none
+		sourceColumn: DWP_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_BUDGET_HOURS
+		dataType: double
+		lineageTag: 8a129310-4975-442e-b339-2a7aeff6275a
+		summarizeBy: sum
+		sourceColumn: DWP_BUDGET_HOURS
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DWP_COMPANY_ID = ```
+			RELATED('200_DWH DPO_PROJECTS'[DPO_COMPANY_ID])
+			
+			```
+		lineageTag: dbf9335e-e9a4-4b4c-8b2b-c4d5bc08574b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_IS_DELETED
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 309c192e-4c44-4573-a96d-02c619ca520d
+		summarizeBy: none
+		sourceColumn: DWP_IS_DELETED
+
+		annotation SummarizationSetBy = Automatic
+
+	column DWP_BONUS_RATE
+		dataType: double
+		lineageTag: f054fa8f-2d32-40b2-ac57-986253e75068
+		summarizeBy: sum
+		sourceColumn: DWP_BONUS_RATE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition '200_DWH DWP_WORK_PACKAGE' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"200_DWH_DWP_WORK_PACKAGE" = Source{[Schema="200_DWH",Item="DWP_WORK_PACKAGE"]}[Data]
+				in
+				    #"200_DWH_DWP_WORK_PACKAGE"
+
+	annotation PBI_ResultType = Table
+

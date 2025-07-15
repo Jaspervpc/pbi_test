@@ -1,0 +1,50 @@
+relationship e844366a-746f-42c5-b890-e977872dcda2
+	fromColumn: '200_DWH FTS_TIMESHEETS'.FTS_WORK_PACKAGE_ID
+	toColumn: '200_DWH DWP_WORK_PACKAGE'.DWP_ID
+
+relationship 0c2bbc4e-30e4-4924-a517-df5f344c736e
+	fromColumn: '200_DWH FTS_TIMESHEETS'.FTS_TIMESHEET_DATE
+	toColumn: DATE.Date
+
+relationship 078d29f9-00c0-f945-b686-324e9f7a76ac
+	fromColumn: '200_DWH DPE_EMPLOYEES'.DPE_SUBCOMPANY_ID
+	toColumn: '200_DWH DCO_COMPANIES'.DCO_LEGAL_ENTITY_SUB
+
+relationship 03e41b3d-7c5b-4fd3-89e9-628070a1d8c6
+	fromColumn: '200_DWH FTS_TIMESHEETS'.FTS_SURROGATE_KEY
+	toColumn: '200_DWH DPE_EMPLOYEES'.DPE_SURROGATE
+
+relationship e5c218f1-557b-41a6-928e-9d169477f691
+	fromColumn: '200_DWH DWP_WORK_PACKAGE'.DWP_PROJECT_ID
+	toColumn: '200_DWH DPO_PROJECTS'.DPO_ID
+
+relationship a084ee6d-0091-44c6-9c74-690c2594c86e
+	fromColumn: Timesheets2.FTS_SURROGATE_KEY
+	toColumn: EMPLOYEE2.DPE_SURROGATE
+
+relationship c732695f-e237-44f6-93f9-7f065deaa400
+	fromColumn: Timesheets2.FTS_TIMESHEET_DATE
+	toColumn: DATE2.Date
+
+relationship d2524689-83f9-613d-cbe2-d2daf4589420
+	fromColumn: Timesheets2.FTS_WORK_PACKAGE_ID
+	toColumn: Work_Packages2.DWP_ID
+
+relationship c3cc1697-cc94-44db-9fa4-a919ac3d4785
+	fromColumn: '200_DWH FWL_WORKLOGS'.FWL_START_DATE
+	toColumn: DATE.Date
+
+relationship 357800b6-3c8b-4bc4-a77b-2b628a7c551a
+	fromColumn: '200_DWH FWL_WORKLOGS'.FWL_SURROGATE
+	toColumn: '200_DWH DPE_EMPLOYEES'.DPE_SURROGATE
+
+relationship dc7c9c5b-b4e6-4332-9c4a-00d8536af247
+	fromColumn: '200_DWH FWL_WORKLOGS'.FWL_WORK_PACKAGE_ID
+	toColumn: '200_DWH DWP_WORK_PACKAGE'.DWP_ID
+
+relationship 33566e91-755b-4ce3-9c24-9b614730b165
+	fromColumn: KPIs_AGGREGATED.FTS_SURROGATE_KEY
+	toColumn: '200_DWH DPE_EMPLOYEES'.DPE_SURROGATE
+
+	annotation PBI_IsFromSource = FS
+

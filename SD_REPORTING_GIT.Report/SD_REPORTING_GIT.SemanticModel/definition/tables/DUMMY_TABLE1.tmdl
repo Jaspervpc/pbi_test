@@ -1,0 +1,22 @@
+table DUMMY_TABLE1
+	lineageTag: aad0c941-92f5-4f1a-8d56-d599f9016c97
+
+	column Column1
+		dataType: string
+		lineageTag: 5be3e87e-8aed-451c-a40c-7750c04e81af
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DUMMY_TABLE1 = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WcszJUfDILy0qVorViVbyz8upVHDKz89OTVEIzy/KVghITM5OTE8FysYCAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

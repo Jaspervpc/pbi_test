@@ -1,0 +1,15 @@
+role 'GROUP Project Manager'
+	modelPermission: read
+
+	tablePermission '200_DWH DPO_PROJECTS' = ```
+			VAR CurrentUserID = CALCULATE(
+			    MAX('200_DWH DPE_EMPLOYEES'[DPE_EMPLOYEE_ID]),
+			    '200_DWH DPE_EMPLOYEES'[DPE_MAIL] = USERPRINCIPALNAME()
+			)
+			Return 
+			If(
+			[DPO_PROJECT_MANAGER_ID] = CurrentUserID, True, False)
+			```
+
+	annotation PBI_Id = 2410f720d0fb446aa83b0fa09c25993b
+

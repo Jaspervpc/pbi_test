@@ -1,0 +1,122 @@
+table KPIs_AGGREGATED
+	lineageTag: b6b65d14-dbee-4355-a29d-3db10e50a32c
+
+	column FTS_RECORDED_HOURS
+		dataType: double
+		lineageTag: 67b04095-d1c8-4609-957d-aa8eccf4d4e1
+		summarizeBy: sum
+		sourceColumn: FTS_RECORDED_HOURS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FTS_TIMESHEET_DATE
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d9e7f965-4365-42dc-a0ed-481af087d082
+		summarizeBy: none
+		sourceColumn: FTS_TIMESHEET_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column FTS_WORK_PACKAGE_ID
+		dataType: string
+		lineageTag: f149b0f2-3a5b-4f4c-9558-02b8a92a3ee5
+		summarizeBy: none
+		sourceColumn: FTS_WORK_PACKAGE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_COMPANY_AGG = ```
+			
+			LOOKUPVALUE(
+			    '200_DWH DWP_WORK_PACKAGE'[DWP_COMPANY_ID],  -- Column to retrieve
+			    '200_DWH DWP_WORK_PACKAGE'[DWP_ID], 
+			    KPIs_AGGREGATED[FTS_WORK_PACKAGE_ID]  -- Matching Work Package ID
+			)
+			
+			```
+		lineageTag: 470132b6-cba1-440b-9c76-c6e05f682217
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_SURROGATE_KEY
+		dataType: string
+		lineageTag: ea8e17a2-21b8-4683-98c9-a48250b6391a
+		summarizeBy: none
+		sourceColumn: FTS_SURROGATE_KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column '200_DWH DPE_EMPLOYEES.DPE_SUBCOMPANY_ID'
+		dataType: string
+		lineageTag: 40ed52d8-89cc-4d12-a8d8-48f91e4ea617
+		summarizeBy: none
+		sourceColumn: 200_DWH DPE_EMPLOYEES.DPE_SUBCOMPANY_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '200_DWH DPE_EMPLOYEES.DPE_DEPARMENT_ID'
+		dataType: string
+		lineageTag: 9f0a769b-f6d9-4a39-ad02-a457f23f74a9
+		summarizeBy: none
+		sourceColumn: 200_DWH DPE_EMPLOYEES.DPE_DEPARMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTS_BILLABLE
+		dataType: string
+		lineageTag: 766320d3-9f03-4c0a-9ed2-25d66dd807b0
+		summarizeBy: none
+		sourceColumn: FTS_BILLABLE
+
+		annotation SummarizationSetBy = Automatic
+
+	column '200_DWH DPE_EMPLOYEES.DPE_FULLNAME'
+		dataType: string
+		lineageTag: f1553d15-47d4-4a67-abb4-6d941c269907
+		summarizeBy: none
+		sourceColumn: 200_DWH DPE_EMPLOYEES.DPE_FULLNAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column '200_DWH DPE_EMPLOYEES.DPE_SURROGATE'
+		dataType: string
+		lineageTag: 3b7d2131-d0cc-4d28-8afb-05b6d8ce927c
+		summarizeBy: none
+		sourceColumn: 200_DWH DPE_EMPLOYEES.DPE_SURROGATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column '200_DWH DPE_EMPLOYEES.DPE_BILLABLE'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 526bd94b-cd3c-41e0-b41a-80937ea69f0f
+		summarizeBy: none
+		sourceColumn: 200_DWH DPE_EMPLOYEES.DPE_BILLABLE
+
+		annotation SummarizationSetBy = Automatic
+
+	partition KPIs_AGGREGATED = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				      #"200_DWH_FTS_TIMESHEETS" = Source{[Schema="200_DWH",Item="FTS_TIMESHEETS"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"200_DWH_FTS_TIMESHEETS",{{"FTS_TIMESHEET_DATE", type date}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [FTS_TIMESHEET_ID] <> "000000000359" and [FTS_TIMESHEET_ID] <> "000000000360" and [FTS_TIMESHEET_ID] <> "000000000361" and [FTS_TIMESHEET_ID] <> "000000000350"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"FTS_PROJECT_ID", "FTS_CUSTOMER_ID"}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Removed Columns", each [FTS_SURROGATE_KEY] <> null and [FTS_SURROGATE_KEY] <> ""),
+				    #"Merged Queries" = Table.NestedJoin(#"Filtered Rows1", {"FTS_SURROGATE_KEY"}, #"200_DWH DPE_EMPLOYEES", {"DPE_SURROGATE"}, "200_DWH DPE_EMPLOYEES", JoinKind.LeftOuter),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Merged Queries",{"FTS_ABSENCE_STATUS", "FTS_PERSONIO_ID", "FTS_UPLOAD_TIME", "FTS_ABSENCE_FRACTION", "FTS_TIMESHEET_ID", "FTS_SURROGATE_KEY", "FTS_COMPANY_ID", "FTS_BILLABLE", "FTS_DESCRIPTION", "FTS_WORK_PACKAGE_ID", "FTS_RECORDED_HOURS", "FTS_TIMESHEET_DATE", "FTS_ACTIVITY_TYPE", "FTS_CREATED_DATE", "200_DWH DPE_EMPLOYEES"}),
+				    #"Expanded 200_DWH DPE_EMPLOYEES" = Table.ExpandTableColumn(#"Removed Other Columns", "200_DWH DPE_EMPLOYEES", {"DPE_SUBCOMPANY_ID", "DPE_FULLNAME", "DPE_SURROGATE", "DPE_DEPARMENT_ID", "DPE_BILLABLE"}, {"200_DWH DPE_EMPLOYEES.DPE_SUBCOMPANY_ID", "200_DWH DPE_EMPLOYEES.DPE_FULLNAME", "200_DWH DPE_EMPLOYEES.DPE_SURROGATE", "200_DWH DPE_EMPLOYEES.DPE_DEPARMENT_ID", "200_DWH DPE_EMPLOYEES.DPE_BILLABLE"}),
+				    #"Removed Other Columns1" = Table.SelectColumns(#"Expanded 200_DWH DPE_EMPLOYEES",{"FTS_SURROGATE_KEY", "FTS_BILLABLE", "FTS_WORK_PACKAGE_ID", "FTS_RECORDED_HOURS", "FTS_TIMESHEET_DATE", "200_DWH DPE_EMPLOYEES.DPE_SUBCOMPANY_ID", "200_DWH DPE_EMPLOYEES.DPE_FULLNAME", "200_DWH DPE_EMPLOYEES.DPE_SURROGATE", "200_DWH DPE_EMPLOYEES.DPE_DEPARMENT_ID","200_DWH DPE_EMPLOYEES.DPE_BILLABLE"})
+				in
+				    #"Removed Other Columns1"
+
+	annotation PBI_ResultType = Table
+

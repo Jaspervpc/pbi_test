@@ -1,0 +1,23 @@
+table HLP_last_employee_update
+	lineageTag: ea97cba2-f459-4a9f-a265-28d6b35926f4
+
+	column last_checked_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e1e35001-d99a-4264-a457-5e00f706d342
+		summarizeBy: none
+		sourceColumn: last_checked_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition HLP_last_employee_update = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    #"Sync_Log" = Source{[Schema="public", Item="watermark"]}[Data]
+				in
+				    Sync_Log
+
+	annotation PBI_ResultType = Table
+

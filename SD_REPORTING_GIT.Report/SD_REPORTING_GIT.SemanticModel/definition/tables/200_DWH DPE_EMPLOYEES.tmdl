@@ -1,0 +1,469 @@
+table '200_DWH DPE_EMPLOYEES'
+	lineageTag: 8e9ee816-3bb6-4457-a635-8bc5e3b400fa
+
+	column DPE_ISCURRENT
+		dataType: string
+		lineageTag: 4bebf310-e21e-480b-a950-c19d3d147f1c
+		summarizeBy: none
+		sourceColumn: DPE_ISCURRENT
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_SUBCOMPANY_ID
+		dataType: string
+		lineageTag: 5cf71f51-5044-4e5b-a0b6-17b839e60779
+		summarizeBy: none
+		sourceColumn: DPE_SUBCOMPANY_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_EXIT_DATE
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d0c7239f-c256-42f1-b667-a9c30f11a49b
+		summarizeBy: none
+		sourceColumn: DPE_EXIT_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DPE_EMPLOYEE_ID
+		dataType: string
+		lineageTag: 8b814677-48e3-4902-a2fb-7b95b42a1a76
+		summarizeBy: none
+		sourceColumn: DPE_EMPLOYEE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_POSITION
+		dataType: string
+		lineageTag: 4146b395-ba4f-4eef-a340-2301e54699a4
+		summarizeBy: none
+		sourceColumn: DPE_POSITION
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_COST_CENTER_ID
+		dataType: string
+		lineageTag: 4f2cb861-cc73-4b9b-8db8-1df42b7398da
+		summarizeBy: none
+		sourceColumn: DPE_COST_CENTER_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_WEEKLY_WORKING_HOURS
+		dataType: double
+		lineageTag: 449858f0-65aa-46d7-961e-3aaf72ed497e
+		summarizeBy: sum
+		sourceColumn: DPE_WEEKLY_WORKING_HOURS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DPE_VALID_FROM
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e70d324b-a39d-49b4-b5d9-55483ef4ce05
+		summarizeBy: none
+		sourceColumn: DPE_VALID_FROM
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DPE_BILLABLE
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4c5fcff7-c1b8-410a-85e3-832576af0e9a
+		summarizeBy: none
+		sourceColumn: DPE_BILLABLE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_PERMANENT
+		dataType: string
+		lineageTag: 99d70065-b180-47f3-9bdc-93c70bc7d9a4
+		summarizeBy: none
+		sourceColumn: DPE_PERMANENT
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_FIRST_ENTRY_DATE
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 49ee1cf8-a852-4cea-8981-f8d84a4048b6
+		summarizeBy: none
+		sourceColumn: DPE_FIRST_ENTRY_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DPE_GENDER
+		dataType: string
+		lineageTag: 54c33a3b-37ce-4784-bce5-e8c47ff52eba
+		summarizeBy: none
+		sourceColumn: DPE_GENDER
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_TERMINATION_TYPE
+		dataType: string
+		lineageTag: 913d5467-64a7-4728-95e5-3f8d6efe81f8
+		summarizeBy: none
+		sourceColumn: DPE_TERMINATION_TYPE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_MAIL
+		dataType: string
+		lineageTag: 1bba5659-403d-459f-874b-186937232cdc
+		summarizeBy: none
+		sourceColumn: DPE_MAIL
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_VALID_TO
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b2345c48-f84f-448d-b7b6-d25970c944fd
+		summarizeBy: none
+		sourceColumn: DPE_VALID_TO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DPE_COST_CENTER_NAME
+		dataType: string
+		lineageTag: bc191b26-4ae2-4f68-b86d-6f87b534e04a
+		summarizeBy: none
+		sourceColumn: DPE_COST_CENTER_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_SURROGATE
+		dataType: string
+		lineageTag: b06d9853-4fc6-471a-92dc-3dcf66c7e98c
+		summarizeBy: none
+		sourceColumn: DPE_SURROGATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_FTE
+		dataType: double
+		lineageTag: e4da14e1-60ca-4fa3-b093-a4a07ac4b7d6
+		summarizeBy: sum
+		sourceColumn: DPE_FTE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DPE_UPLOAD_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 797cbd04-e6c3-4908-9fe1-31fa5b23af3f
+		summarizeBy: none
+		sourceColumn: DPE_UPLOAD_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_HIRE_DATE
+		dataType: string
+		lineageTag: e5cc0ff6-347f-4637-b22a-f0e3807f2b3a
+		summarizeBy: none
+		sourceColumn: DPE_HIRE_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_COST_CENTER_WEIGHT
+		dataType: double
+		formatString: 0
+		lineageTag: 35b55b60-7203-43f9-bb12-4f7ddf30370a
+		summarizeBy: sum
+		sourceColumn: DPE_COST_CENTER_WEIGHT
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_RANK
+		dataType: int64
+		formatString: 0
+		lineageTag: 981275ed-8577-4bb3-bc57-5cd4a1d390da
+		summarizeBy: sum
+		sourceColumn: DPE_RANK
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_ENTRY_DATE
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5f21c209-c37a-4983-9537-6a6ff0ba6d0c
+		summarizeBy: none
+		sourceColumn: DPE_ENTRY_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DPE_EMPLOYEE_FUNCTION
+		dataType: string
+		lineageTag: 2345e417-2a79-4965-b394-f4015cdc1da0
+		summarizeBy: none
+		sourceColumn: DPE_EMPLOYEE_FUNCTION
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_DEPARMENT_ID
+		dataType: string
+		lineageTag: e32a0f31-5056-4fc5-a7a9-06ffa45fb105
+		summarizeBy: none
+		sourceColumn: DPE_DEPARMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_SURNAME
+		dataType: string
+		lineageTag: 5f77fe3d-9e81-4ebe-a64c-d82522bf1b5d
+		summarizeBy: none
+		sourceColumn: DPE_SURNAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_NAME
+		dataType: string
+		lineageTag: e60e0982-659d-46d3-a8cf-00f58534ed0f
+		summarizeBy: none
+		sourceColumn: DPE_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_FULLNAME
+		dataType: string
+		lineageTag: 0c70516d-6019-45a6-9cbe-cf7501ba031a
+		summarizeBy: none
+		sourceColumn: DPE_FULLNAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_PROFESSIONAL
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: bda78dfa-1427-425a-a2a7-6db32657c684
+		summarizeBy: none
+		sourceColumn: DPE_PROFESSIONAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_DAILY_WORKING_HOURS
+		dataType: double
+		lineageTag: b95925cf-6512-4513-bc44-8092842e5c5d
+		summarizeBy: sum
+		sourceColumn: DPE_DAILY_WORKING_HOURS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DPE_SUPERVISOR_ID
+		dataType: string
+		lineageTag: 4a240ace-2b3d-4dfd-8aac-d9e3628b1e5f
+		summarizeBy: none
+		sourceColumn: DPE_SUPERVISOR_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Path = Path('200_DWH DPE_EMPLOYEES'[DPE_EMPLOYEE_ID], '200_DWH DPE_EMPLOYEES'[DPE_SUPERVISOR_ID])
+		lineageTag: 06288561-56fb-4f66-bd9e-1f9831c742e3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pathlength = PATHLENGTH('200_DWH DPE_EMPLOYEES'[Path])
+		formatString: 0
+		lineageTag: 29262182-2bc8-41e9-9e57-809e9da19fb8
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Department Group'
+		dataType: string
+		lineageTag: fde1927b-58bf-49a8-9108-7aa2f8cd2c34
+		summarizeBy: none
+		sourceColumn: Department Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSupervisor
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 31e482e4-105c-445f-b509-b6d709cafd54
+		summarizeBy: none
+		sourceColumn: IsSupervisor
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_PLAN_FTE
+		dataType: double
+		lineageTag: e423d9ae-8d8d-46c6-a0d8-3ea12f7a3e79
+		summarizeBy: sum
+		sourceColumn: DPE_PLAN_FTE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IsProjectManager
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f01b234d-a8e5-440e-ab20-727fc315be50
+		summarizeBy: none
+		sourceColumn: IsProjectManager
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Test PlannedFTE_Adjusted' = ```
+			
+			IF(
+			    '200_DWH DPE_EMPLOYEES'[DPE_PROFESSIONAL] = TRUE,
+			    1, -- This represents 100%
+			    '200_DWH DPE_EMPLOYEES'[DPE_PLAN_FTE]
+			)
+			
+			```
+		lineageTag: 3f3a342c-a521-4e57-b56c-a347a77ac7fe
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InTimesheets
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 19a8472f-0781-4193-b083-f68003497ff9
+		summarizeBy: none
+		sourceColumn: InTimesheets
+
+		annotation SummarizationSetBy = Automatic
+
+	column InEmployeeID
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e2cac3a0-deec-4f58-add2-1950936e744d
+		summarizeBy: none
+		sourceColumn: InEmployeeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DPE_TEAM
+		dataType: string
+		lineageTag: cc68d400-3ace-44c3-9716-b33d25623f66
+		summarizeBy: none
+		sourceColumn: DPE_TEAM
+
+		annotation SummarizationSetBy = Automatic
+
+	column TeamCorrected
+		dataType: string
+		lineageTag: 420abb42-b3d5-4ba5-868d-8cd5af3e8f23
+		summarizeBy: none
+		sourceColumn: TeamCorrected
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '200_DWH DPE_EMPLOYEES' = m
+		mode: import
+		source = ```
+				let
+				    // Load the database
+				    Source = PostgreSQL.Database("sdreporting-server-prod.postgres.database.azure.com", "sd_reporting"),
+				    
+				    // Load the Employees Table
+				    #"200_DWH_DPE_EMPLOYEES" = Source{[Schema="200_DWH",Item="DPE_EMPLOYEES"]}[Data],
+				
+				    // Load the Projects Table
+				    #"200_DWH_DPO_PROJECTS" = Source{[Schema="200_DWH",Item="DPO_PROJECTS"]}[Data],
+				
+				    // Load the Timesheets Table
+				    #"200_DWH_FTS_TIMESHEETS" = Source{[Schema="200_DWH",Item="FTS_TIMESHEETS"]}[Data],
+				
+				    // Create a List of DPE_SUPERVISOR_IDs
+				    SupervisorIDList = List.Distinct(#"200_DWH_DPE_EMPLOYEES"[DPE_SUPERVISOR_ID]),
+				
+				    // Create a List of DPO_PROJECT_MANAGER_IDs from the project table
+				    ProjectManagerIDList = List.Distinct(#"200_DWH_DPO_PROJECTS"[DPO_PROJECT_MANAGER_ID]),
+				
+				    // Create a List of FTS_TIMESHEETS_IDs from the timesheets table
+				    TimesheetIDList = List.Distinct(#"200_DWH_FTS_TIMESHEETS"[FTS_SURROGATE_KEY]),
+				
+				    // Add Daily Working Hours Column
+				    #"Added DailyWorkingHours" = Table.AddColumn(#"200_DWH_DPE_EMPLOYEES", "DPE_DAILY_WORKING_HOURS", each [DPE_WEEKLY_WORKING_HOURS] / 5, type number),
+				    
+				    // Add Department Group Column
+				    #"Added DepartmentGroup" = Table.AddColumn(
+				        #"Added DailyWorkingHours", 
+				        "Department Group", 
+				        each if [DPE_DEPARMENT_ID] = null then null 
+				        else if Text.StartsWith([DPE_DEPARMENT_ID], "SYN | Tech") then "SYN | Tech" 
+				        else [DPE_DEPARMENT_ID], 
+				        type text
+				    ),
+				
+				    #"Add Team_adjusted" = Table.AddColumn(
+				    #"Added DepartmentGroup", 
+				    "TeamCorrected", 
+				    each if [DPE_TEAM] = null or [DPE_TEAM] = "" then [DPE_DEPARMENT_ID] else [DPE_TEAM], 
+				    type text
+				),
+				    
+				
+				    // Add IsSupervisor Column
+				    #"Added IsSupervisor" = Table.AddColumn(
+				        #"Add Team_adjusted", 
+				        "IsSupervisor", 
+				        each if List.Contains(SupervisorIDList, [DPE_EMPLOYEE_ID]) then true else false, 
+				        type logical
+				    ),
+				
+				    // Add IsProjectManager Column
+				    #"Added IsProjectManager" = Table.AddColumn(
+				        #"Added IsSupervisor", 
+				        "IsProjectManager", 
+				        each if List.Contains(ProjectManagerIDList, [DPE_EMPLOYEE_ID]) then true else false, 
+				        type logical
+				    ),
+				
+				    // Add "InTimesheets" Column
+				    #"Added InTimesheets" = Table.AddColumn(
+				        #"Added IsProjectManager", 
+				        "InTimesheets", 
+				        each if List.Contains(TimesheetIDList, [DPE_SURROGATE]) then true else false, 
+				        type logical
+				    ),
+				
+				    // Filter Rows
+				    #"Filtered Rows" = Table.SelectRows(#"Added InTimesheets", each ([DPE_SUPERVISOR_ID] <> "10233035" and [DPE_SUPERVISOR_ID] <> "12480271" and [DPE_SUPERVISOR_ID] <> "11299797" and [DPE_SUPERVISOR_ID] <> "12423958" and [DPE_SUPERVISOR_ID] <> "11412200" and [DPE_SUPERVISOR_ID] <> "12470628") and ([DPE_EMPLOYEE_ID] <> null) and 
+				    // ([DPE_SUBCOMPANY_ID] = "XIN" or [DPE_SUBCOMPANY_ID] = "SYN" or [DPE_SUBCOMPANY_ID] = "ARS" or [DPE_SUBCOMPANY_ID] = "EXTERNS" or [DPE_SUBCOMPANY_ID] = "TDE" or [DPE_SUBCOMPANY_ID] = "TGG") and 
+				    ([DPE_FULLNAME] <> "Dryrun Mustermann" and [DPE_FULLNAME] <> "Rundry Musterfrau")),
+				    #"Gefilterte Zeilen" = Table.SelectRows(#"Filtered Rows", each not (([DPE_EMPLOYEE_ID] = "23296257" or [DPE_EMPLOYEE_ID] = "23400943") and [DPE_SUPERVISOR_ID] = null)),
+				    #"Entfernte Duplikate" = Table.Distinct(#"Gefilterte Zeilen"),
+				    #"Filtered Rows1" = Table.SelectRows(#"Entfernte Duplikate", each ([DPE_SURROGATE] <> null and [DPE_SURROGATE] <> "")),
+				    #"Mit InEmployeeID-Spalte" = Table.AddColumn(#"Filtered Rows", "InEmployeeID", 
+				    each if [DPE_SUPERVISOR_ID] = null or [DPE_SUPERVISOR_ID] = "" then true 
+				         else List.Contains(#"Filtered Rows"[DPE_EMPLOYEE_ID], [DPE_SUPERVISOR_ID]), 
+				    type logical
+				),
+				    #"Filtered Rows2" = Table.SelectRows(#"Mit InEmployeeID-Spalte", each ([DPE_FULLNAME] <> "Brainy Mustermann" and [DPE_FULLNAME] <> "Tempo Mustermann - Test" and [DPE_FULLNAME] <> "Max Mustermann" and [DPE_FULLNAME] <> "Marta Musterfrau"))
+				
+				
+				in
+				    #"Filtered Rows2"
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

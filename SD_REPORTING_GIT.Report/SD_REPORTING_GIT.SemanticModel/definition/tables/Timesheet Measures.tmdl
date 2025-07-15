@@ -1,0 +1,624 @@
+table 'Timesheet Measures'
+	lineageTag: 6594e4ee-260b-4f1a-9fc7-a3609f0bd81c
+
+	measure 'HRS.BILL' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        ISBLANK('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE])
+			    )
+			VAR POOLED_BILL_EFFORT =
+			    SUMX (
+			        '200_DWH FTS_TIMESHEETS',
+			        '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] *
+			        RELATED('200_DWH DWP_WORK_PACKAGE'[DWP_BONUS_RATE])
+			    )
+			RETURN
+			TotalHours + POOLED_BILL_EFFORT
+			```
+		lineageTag: 4fd8c18b-67bf-4b85-9ba4-ba95926549e7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.NON.BILL' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        ('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = "NON_BILL"))
+			                
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			
+			
+			
+			```
+		lineageTag: 3f9e86cb-d8a0-4547-ad55-d8e78b453c7a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.BOOKED' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]))
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			
+			
+			```
+		lineageTag: ca133fb2-566a-42df-b4f9-98c2cfe2d33a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.WORKING.PAID' = ```
+			
+			SUMX(
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES',
+			        [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" && '200_DWH DPE_EMPLOYEES'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [FTE.CONTRACTED.HRS] -
+			        [HRS.PERCAT.CHILDCARE] -
+			        [HRS.PERCAT.FAMILYCARE] -
+			        [HRS.PERCAT.HOL] -
+			        [HRS.PERCAT.MAT.PAT.LEAVE] -
+			        [HRS.PERCAT.OTHER] -
+			        [HRS.PERCAT.PAIDVAC] -
+			        [HRS.PERCAT.UNPAIDVAC]
+			    ) 
+			)
+			
+			```
+		lineageTag: 0043199f-84ec-402b-a62a-8b6a5cbcc2fd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DAYS.WORKING.PAID' = [HRS.WORKING.PAID]/8
+		lineageTag: 794284b3-ad58-462d-92b3-3dd9948bea4b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.WORKING.AVAILABLE' = ```
+			
+			SUMX(
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES',
+			        [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" && '200_DWH DPE_EMPLOYEES'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [HRS.WORKING.PAID] -
+			        [HRS.PERCAT.SICK]
+			    ) 
+			)
+			
+			```
+		lineageTag: d3d1667a-6d2a-4df7-a7f2-23c9bdbf2e90
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure HRS:TEST = ```
+			
+			CALCULATE(
+			    SUMX(
+			        FILTER(
+			            '200_DWH FTS_TIMESHEETS',
+			            ('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = "BILL" || 
+			            ISBLANK('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE])) &&
+			            [BookedInDateRange] = TRUE()
+			        ),
+			        '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] 
+			)
+			)
+			```
+		formatString: 0.00
+		lineageTag: ad4cbce5-598a-4523-81be-fc959a08db91
+
+	measure 'HRS.EXP.NONBILL.OLD' = ```
+			
+			// Aggregated Bill Hrs at Working Days
+			DIVIDE(
+			    CALCULATE(
+			        [HRS.NON.BILL], 
+			        FILTER(
+			            'DATE', 
+			            'DATE'[IsWorkingDay] = 1
+			        )
+			    ),
+			    CALCULATE(
+			        SUM('DATE'[IsWorkingDay]), 
+			        FILTER(
+			            'DATE', 
+			            [IsDateLessOrEqualSecondMax] = TRUE()
+			        )
+			    )
+			)*SUM('DATE'[IsWorkingDay])
+			// Aggregated Bill Hrs at Non-Working Days
+			+DIVIDE(
+			    CALCULATE(
+			        [HRS.NON.BILL], 
+			        FILTER(
+			            'DATE', 
+			            'DATE'[IsWorkingDay] = 0
+			        )
+			    ),
+			    CALCULATE(
+			        [Non-working day], 
+			        FILTER(
+			            'DATE', 
+			            [IsDateLessOrEqualSecondMax] = TRUE()
+			        )
+			    )
+			)*[Non-working day]
+			```
+		lineageTag: c606b665-8a6d-4146-b873-6601779e3276
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure EXP_BILL_FTE_WORKINGDAYS =
+			
+			VAR Result = DIVIDE('Timesheet Measures'[HRS.EXP.BILL],
+			[SUM.CONTRACTED.FTE])/CALCULATE(sum('DATE'[IsWorkingDay]))
+			VAR EXPRESSION = "PLEASE SELECT A MONTH"
+			RETURN IF(NOT(ISBLANK(SELECTEDVALUE('DATE'[Month Number]))), Result, EXPRESSION)
+		lineageTag: 4e109dd9-a46f-4051-b2bc-ebee6ef7d097
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EXP.BILL_FTE' =
+			
+			VAR Result = [HRS.EXP.BILL]
+			/
+			[SUM.CONTRACTED.FTE]
+			VAR EXPRESSION = "PLEASE SELECT A MONTH"
+			RETURN IF(NOT(ISBLANK(SELECTEDVALUE('DATE'[Month Number]))), Result, EXPRESSION)
+		lineageTag: 935a4f4a-444c-4274-b10e-bfd40d3da7f6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.BILL%' = ```
+			
+			DIVIDE(
+			    [HRS.BILL.MTD],
+			    [HRS.BOOKED.MTD],
+			    0
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: f53f79f2-10e7-42cb-9a71-ff3ec944d35a
+
+	measure 'HRS.BOOKED %' = ```
+			
+			DIVIDE(
+			    [HRS.BOOKED],
+			    [HRS.BOOKED],
+			    0
+			)
+			
+			```
+		lineageTag: 5d3857f6-5869-45ff-be12-d4fcb10e7604
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.NONBILL %' = ```
+			
+			DIVIDE(
+			    [HRS.NON.BILL.MTD],
+			    [HRS.BOOKED.MTD],
+			    0
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 7b122bc7-4701-447d-abd9-70dda14f9900
+
+	measure 'HRS.EXP.BILL' = [HRS.BILL.MTD-1]/[HRS.WORKING.PAID.MTD-1]*[PAID.HRS.MONTH]
+		lineageTag: 20eed52b-a6a2-4afe-968e-b6fb9f9ef565
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.NON.BILL.PRO' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			        '200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = "NON_BILL",
+			        '200_DWH DPO_PROJECTS'[DPO_CATEGORY] = "Customer project"
+			    )
+			RETURN
+			// IF(
+			//     ISBLANK(TotalHours),
+			//     0,
+			//     TotalHours
+			// )
+			TotalHours
+			
+			```
+		lineageTag: b4d48eae-9976-4f1e-bde7-4675cdb36196
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.WORKING.PAID.MTD-1' = ```
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth]
+			VAR FirstDateOfSelectedMonth = 
+			CALCULATE(
+			    STARTOFMONTH('DATE'[Date]))
+			RETURN
+			CALCULATE(
+			    [HRS.WORKING.PAID],
+			    FILTER(
+			        ALL('DATE'),
+			        'DATE'[Date] >= FirstDateOfSelectedMonth && 'DATE'[Date] <= MaxDate
+			    )
+			)
+			
+			```
+		lineageTag: 77c00dc1-03b5-4f63-ad45-bc9291b0bb11
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.BILL.MTD-1' = ```
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth]
+			VAR IsCurrent = [IsCurrentinDate]
+			VAR IsInRange = [IsEmployeedDateInRange]
+			VAR BillHours =
+			    IF(
+			        IsCurrent = "TRUE" && IsInRange = "TRUE",
+			        CALCULATE(
+			            SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			            '200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = BLANK(),
+			            '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] <= MaxDate
+			        )
+			    )
+			VAR POOL_BILL_EFFORT =
+			    SUMX (
+			        FILTER(
+			            '200_DWH FTS_TIMESHEETS',
+			            '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] <= MaxDate
+			        ),
+			        '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] *
+			        RELATED('200_DWH DWP_WORK_PACKAGE'[DWP_BONUS_RATE])
+			    )
+			
+			RETURN
+			BillHours + POOL_BILL_EFFORT
+			
+			```
+		lineageTag: 4f158d99-01ad-42de-befe-a2879b4ff077
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.NON.BILL.MTD-1' = ```
+			
+			// SUMX(
+			//     '200_DWH FTS_TIMESHEETS',
+			//     IF(
+			//         '200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = "NON_BILL" && [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" 
+			//         && '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] < [SecondMaxFinishedDateSelectedMonth]
+			//  ,
+			//         '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] * [ActiveDaysShare],
+			//         0
+			//     )
+			// )
+			COALESCE(
+			    CALCULATE(
+			        SUMX(
+			            FILTER(
+			                '200_DWH FTS_TIMESHEETS',
+			                '200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = "NON_BILL" &&
+			                [IsCurrentinDate] = "TRUE" &&
+			                [IsEmployeedDateInRange] = "TRUE" &&
+			                '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] < [MaxFinishedDateSelectedMonth] &&
+			                [BookedInDateRange] = TRUE()
+			            ),
+			            '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]
+			        )
+			    ),
+			    0
+			)
+			
+			```
+		lineageTag: 4bab9036-749e-4682-a693-4d2475af7349
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.BOOKED.MTD-1' = ```
+			
+			// SUMX(
+			//     FILTER(
+			//         '200_DWH FTS_TIMESHEETS',
+			//         '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] < [SecondMaxFinishedDateSelectedMonth]
+			//     ),
+			//     '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] * [ActiveDaysShare]
+			// )
+			COALESCE(
+			    CALCULATE(
+			        SUMX(
+			            FILTER(
+			                '200_DWH FTS_TIMESHEETS',
+			                '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] < [MaxFinishedDateSelectedMonth] &&
+			                [BookedInDateRange] = TRUE()
+			            ),
+			            '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]
+			        )
+			    ),
+			    0
+			)
+			
+			```
+		lineageTag: c4601f9b-e1e9-4376-852c-6c0083b579a8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.EXP.NONBILL' = [HRS.NON.BILL.MTD-1]/[HRS.WORKING.PAID.MTD-1]*[PAID.HRS.MONTH]
+		lineageTag: 6f1e47f3-b425-4f95-a245-63a54aa0c3c0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.WORKING.AVAILABLE.MTD-1' = ```
+			
+			SUMX(
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES',
+			        [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" && '200_DWH DPE_EMPLOYEES'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [HRS.WORKING.PAID.MTD-1] -
+			        [HRS.PERCAT.SICK.MTD-1]
+			    ) 
+			)
+			
+			```
+		lineageTag: f25a8930-550c-4f49-a337-80935a500230
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BookedInDateRange = ```
+			
+			CALCULATE(
+			    SUMX(
+			        '200_DWH FTS_TIMESHEETS',
+			        IF(
+			            '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] >= 
+			                CALCULATE(MIN('200_DWH DPE_EMPLOYEES'[DPE_VALID_FROM])) &&
+			            (
+			                '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] <= 
+			                CALCULATE(MAX('200_DWH DPE_EMPLOYEES'[DPE_VALID_TO])) ||
+			                CALCULATE(MAX('200_DWH DPE_EMPLOYEES'[DPE_ISCURRENT]) = "TRUE")
+			            ),
+			            1,
+			            0
+			        )
+			    )
+			) > 0
+			
+			```
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2a430ce1-eacf-4728-a844-c9a920bb7f66
+
+	measure 'HRS.WORKING.AVAILABLE.MTD' = ```
+			
+			SUMX(
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES',
+			        [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" && '200_DWH DPE_EMPLOYEES'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [HRS.WORKING.PAID.MTD] -
+			        [HRS.PERCAT.SICK.MTD]
+			    ) 
+			)
+			
+			```
+		lineageTag: a0311695-f622-43a5-892d-089cba84e1cc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.WORKING.PAID.MTD' = ```
+			
+			VAR MaxDate = [MaxFinishedDateSelectedMonth]
+			VAR FirstDateOfSelectedMonth = 
+			CALCULATE(
+			    STARTOFMONTH('DATE'[Date]))
+			RETURN
+			CALCULATE(
+			    [HRS.WORKING.PAID],
+			    FILTER(
+			        ALL('DATE'),
+			        'DATE'[Date] >= FirstDateOfSelectedMonth && 'DATE'[Date] <= MaxDate
+			    )
+			)
+			
+			```
+		lineageTag: a38ae42b-cdd6-415c-8ca7-09f9c25dfff0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.BILL.MTD' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			       ISBLANK('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE]))
+			VAR PooledBillHours =
+			    SUMX (
+			        '200_DWH FTS_TIMESHEETS',
+			        '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] *
+			        RELATED('200_DWH DWP_WORK_PACKAGE'[DWP_BONUS_RATE])
+			    )
+			                
+			RETURN
+			PooledBillHours + TotalHours
+			```
+		formatString: 0.00
+		lineageTag: c882ae03-8385-4bb9-a3d8-427f00c890fe
+
+	measure 'HRS.BOOKED.MTD' = ```
+			
+			// SUMX(
+			//     FILTER(
+			//         '200_DWH FTS_TIMESHEETS',
+			//         '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] < [SecondMaxFinishedDateSelectedMonth]
+			//     ),
+			//     '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] * [ActiveDaysShare]
+			// )
+			[HRS.BILL.MTD] + [HRS.NON.BILL.MTD]
+			
+			```
+		lineageTag: 92719b16-c547-4c07-8af9-dd60403f8a43
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.NON.BILL.MTD' = ```
+			
+			// SUMX(
+			//     '200_DWH FTS_TIMESHEETS',
+			//     IF(
+			//         '200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = "NON_BILL" && [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" 
+			//         && '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] < [SecondMaxFinishedDateSelectedMonth]
+			//  ,
+			//         '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] * [ActiveDaysShare],
+			//         0
+			//     )
+			// )
+			COALESCE(
+			    CALCULATE(
+			        SUMX(
+			            FILTER(
+			                '200_DWH FTS_TIMESHEETS',
+			                '200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = "NON_BILL" &&
+			                [IsCurrentinDate] = "TRUE" &&
+			                [IsEmployeedDateInRange] = "TRUE" &&
+			                '200_DWH FTS_TIMESHEETS'[FTS_TIMESHEET_DATE] <= [MaxFinishedDateSelectedMonth] &&
+			                [BookedInDateRange] = TRUE()
+			            ),
+			            '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]
+			        )
+			    ),
+			    0
+			)
+			
+			```
+		lineageTag: 2a0d8472-1736-4ca8-98a1-d848cd07dd9a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure testbill = ```
+			
+			CALCULATE(
+			    SUM('200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS]),
+			    ('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE] = "BILL" || 
+			                ISBLANK('200_DWH FTS_TIMESHEETS'[FTS_BILLABLE]))
+			)
+			
+			```
+		lineageTag: 91fd1dbd-66e1-4877-a686-30d6a5632e23
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PAID.HRS.MONTH' =
+			CALCULATE([HRS.WORKING.PAID], REMOVEFILTERS('DATE'[DATE])
+			)
+		lineageTag: 2eeaf80c-1d74-432d-bfb2-e79a9bbd222b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure EXP_BILL_FTE_WORKINGDAYS_test =
+			DIVIDE('Timesheet Measures'[HRS.BILL],
+			[SUM.CONTRACTED.FTE])/CALCULATE(sum('DATE'[IsWorkingDay]))
+		lineageTag: 1a5e4dbf-4a3d-468d-8919-d0532d7a7716
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.INT.BILL' = ```
+			
+			VAR TotalHours =
+			    SUMX (
+			        '200_DWH FTS_TIMESHEETS',
+			        '200_DWH FTS_TIMESHEETS'[FTS_RECORDED_HOURS] *
+			        RELATED('200_DWH DWP_WORK_PACKAGE'[DWP_BONUS_RATE])
+			    )
+			
+			RETURN
+			TotalHours
+			
+			```
+		lineageTag: 3e4807f5-e539-4ba3-8877-6d9da88e5625
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.WORKING.TARGET' = ```
+			
+			SUMX(
+			    FILTER(
+			        '200_DWH DPE_EMPLOYEES',
+			        [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE" && '200_DWH DPE_EMPLOYEES'[DPE_BILLABLE] = TRUE() 
+			    ),
+			    (
+			        [FTE.CONTRACTED.HRS] - [HRS.PERCAT.HOL]
+			    ) 
+			)
+			```
+		lineageTag: 4310d68c-d398-4f01-a63d-dde98642dc33
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.WORKING.AVAILABLE.CB' = ```
+			
+			// SUMX(
+			//     FILTER(
+			//         '200_DWH DPE_EMPLOYEES',
+			//         [IsCurrentinDate] = "TRUE" && [IsEmployeedDateInRange] = "TRUE"
+			//     ),
+			//     (
+			//         ([HRS.WORKING.PAID] -
+			//         [HRS.PERCAT.SICK])*DIVIDE([Contracted X Planned FTE], [SUM.CONTRACTED.FTE], 0)
+			//     ) 
+			// )
+			[HRS.WORKING.AVAILABLE] *[CALC.BASED.FACTOR]
+			```
+		lineageTag: 2d577409-3128-4352-8161-692b12a4888c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HRS.BILL.INV' = ```
+			
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('200_DWH FTS_TIMESHEETS'[FTS_INVOICED_HOURS])
+			       
+			    )
+			RETURN
+			TotalHours
+			```
+		lineageTag: 83f84ddc-1f09-422b-83dc-3e5a8992b060
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Timesheet Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
